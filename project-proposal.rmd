@@ -10,12 +10,13 @@ wine_data <- read_csv("data/winemag-data_first150k.csv")
 wine_data
 ```
 
+### Introduction
 
-#1 Introduction
+
 Our primary research question is as follows: What is the relationship between the best wines and where these wines from? Our hypothesis is that the best wines are from France and Italy because we know that this is where most wines come from. We also hypothesize that these higher rated wines will be more expensive. 
 
 
-#2 Data Description
+### Data Description
 
 
 User zackthoutt on Kaggle collected this data by scraping data from WineEnthusiast.com.
@@ -35,6 +36,13 @@ A description of the columns of our data set are as follows
 - `winery`: The winery that made the wine
 
 
+### Glimpse of data
 
-#3 Glimpse of data
+```{r}
+
+glimpse(wine_data)
+
+```
+
+We already put out data in a data folder above step 1.
 
