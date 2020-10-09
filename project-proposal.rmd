@@ -25,3 +25,11 @@ This data was collected by scraping data from wine enthusiasts.
 
 
 #3 Glimpse of data
+
+```{r}
+
+glimpse(wine_data)
+
+```
+
+We already put out data in a data folder above step 1.
