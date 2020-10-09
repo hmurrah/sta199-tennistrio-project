@@ -12,6 +12,7 @@ wine_data
 
 ### Introduction
 
+We are investigating wine ratings from wine enthusiasts. We chose this data because we understand that people relate to each other and share culture through wine drinking. According to a 2019 study by Forbes, the best ranked wine was from Napa Valley (https://www.forbes.com/sites/eustaciahuen/2019/03/25/wine-3/#6b2719750ed0). We are curious to see how and if this has changed.
 
 Our primary research question is as follows: What is the relationship between the best wines and where these wines from? Our hypothesis is that the best wines are from France and Italy because we know that this is where most wines come from. We also hypothesize that these higher rated wines will be more expensive. 
 
