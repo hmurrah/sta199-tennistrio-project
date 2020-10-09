@@ -1,0 +1,10 @@
+---
+title: "Project Proposal - Tennis Trio"
+subtitle: "Due Friday, October 9, 11:59 PM"
+author: "Tennis Trio: Hamilton Murrah, Kellyn McDonald, Naima Turbes"
+output: pdf_document
+---
+```{r packages-data, warning=FALSE, message=FALSE}
+library(tidyverse)
+#____ <- read_csv("data/____.csv") 
+```
