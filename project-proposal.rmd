@@ -6,7 +6,8 @@ output: pdf_document
 ---
 ```{r packages-data, warning=FALSE, message=FALSE}
 library(tidyverse)
-#____ <- read_csv("data/____.csv") 
+wine_data <- read_csv("data/winemag-data_first150k.csv") 
+wine_data
 ```
 
 
