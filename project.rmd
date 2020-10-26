@@ -7,7 +7,6 @@ output: pdf_document
 ```{r packages-data, warning=FALSE, message=FALSE}
 library(tidyverse)
 wine_data <- read_csv("data/winemag-data_first150k.csv") 
-wine_data
 ```
 
 ### Introduction
@@ -46,17 +45,46 @@ We will perform the following tests and statistical methods to evaluate our rese
  
 3. We will use a CLT based t test to determine whether there is a statistically significant difference between the highest rated country's average score and the average wine score for all countries.
  
-3. We will calculate ratio of wine score and price and determine the best value wine for its price. We will visualize these ratios using a scatterplot and compare the weighted ratio versus actual price.
+4. We will calculate ratio of wine score and price and determine the best value wine for its price. We will visualize these ratios using a scatterplot and compare the weighted ratio versus actual price.
 ** have countries be different colors
  
-4. We will calculate on average which variety of wine has the highest rating  by calculating the mean scores of each variety and summarizing the data into a table. We will also visualize this data using a histogram.
+5. We will calculate on average which variety of wine has the highest rating  by calculating the mean scores of each variety and summarizing the data into a table. We will also visualize this data using a histogram.
  
-5. We will use text analysis on the description variable to pick out key word descriptors in order to determine if there is there a relationship between the descriptor and the score. We will visualize this relationship.
+6. We will use text analysis on the description variable to pick out key word descriptors in order to determine if there is there a relationship between the descriptor and the score. We will visualize this relationship.
 
 ### Glimpse of data
 
 ```{r}
-
 glimpse(wine_data)
+```
 
+### Results
+``` {r highest_average_score_by_country, echo = FALSE, warning = F, message = F}
+best_country <- wine_data %>%
+        filter(!is.na(country)) %>%
+        select(country, points) %>%
+        group_by(country) %>%
+        summarize(avg = mean(points)) %>%
+        arrange(desc(avg)) %>%
+        top_n(5)
+best_country
+```
+
+Contrary to our hypothesis, Italy and France are nowhere to be seen in the top 5 or even the top 10 average scoring countries. The top 5 countries with the highest average wine score are Australia, Austria, New Zealand, Switzerland, and Israel, in that order.
+
+
+``` {r average_wine_score_clt}
+t.test(wine_data$points,
+       mu = 90.93939,
+       alternative = "two.sided")
+```
+Here, we see that the overall mean of all wine scores is 88.88125 and has a 95% confidence interval or 88.82544 to 88.93706. This shows us that our observed average score of 90.93939 for Australia has statistical significance in its difference from the mean.
+
+
+``` {r weighted_wine_scores_to_price}
+wine_data
+weighted_avg <- wine_data %>%
+        summarize(winery, variety, price, points, weighted = points/price) %>%
+        arrange(desc(weighted))
+weighted_avg
 ```
