@@ -14,7 +14,7 @@ wine_data
 
 We are investigating wine ratings from wine enthusiasts. We chose this data because we understand that people relate to each other and share culture through wine drinking. According to a 2019 study by Forbes, the best ranked wine was from Napa Valley (https://www.forbes.com/sites/eustaciahuen/2019/03/25/wine-3/#6b2719750ed0). We are curious to see how and if this has changed.
 
-Our primary research question is as follows: What is the relationship between the best wines and where these wines from? Our hypothesis is that the best wines are from France and Italy because we know that this is where most wines come from. We also hypothesize that these higher rated wines will be more expensive. 
+Our primary objective is use this dataset to understand how to select the best wine. We hypothesize that the best wines are also the most expensive wines, come from France and Italy, and are described using positive descriptors.
 
 
 ### Data Description
@@ -47,3 +47,29 @@ glimpse(wine_data)
 
 We already put out data in a data folder above step 1.
 
+### Methodology
+
+We will perform the following tests and statistical methods to evaluate our research question.
+
+1. We will calculate on average which country has the highest rated wines by calculating the mean scores of each country and summarizing the data into a table. We will also visualize this data using a histogram.
+
+2. We will evaluate whether or not it is appropriate to use CLT based tests on the data set using ...
+
+3. We will use a CLT based t test to determine whether there is a statistically significant difference between the highest rated country's average score and the average wine score for all countries. 
+
+3. We will calculate ratio of wine score and price and determine the best value wine for its price. We will visualize these ratios using a scatterplot and compare the weighted ratio versus actual price.
+** have countries be different colors
+
+
+4. We will calculate on average which variety of wine has the highest rating  by calculating the mean scores of each variety and summarizing the data into a table. We will also visualize this data using a histogram.
+
+5. We will use text analysis on the description variable to pick out key word descriptors in order to determine if there is there a relationship between the descriptor and the score. We will visualize this relationship.
+
+
+```{r}
+view(wine_data) %>%
+  select (country)
+
+```
+
+### Results
