@@ -88,3 +88,10 @@ weighted_avg <- wine_data %>%
         arrange(desc(weighted))
 weighted_avg
 ```
+
+
+
+
+
+
+### Discussion
