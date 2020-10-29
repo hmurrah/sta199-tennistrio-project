@@ -43,6 +43,7 @@ A description of the columns of our data set are as follows
 
 glimpse(wine_data)
 
+<<<<<<< HEAD
 ```
 
 We already put out data in a data folder above step 1.
@@ -73,3 +74,6 @@ view(wine_data) %>%
 ```
 
 ### Results
+=======
+```
+>>>>>>> 5ee05b78a5726302dbf4fb534ecac7719d2a1cab

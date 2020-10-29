@@ -1,0 +1,90 @@
+---
+title: "Project Draft - Tennis Trio"
+subtitle: "Due Friday, October 9, 11:59 PM"
+author: "Tennis Trio: Hamilton Murrah, Kellyn McDonald, Naima Turbes"
+output: pdf_document
+---
+```{r packages-data, warning=FALSE, message=FALSE}
+library(tidyverse)
+wine_data <- read_csv("data/winemag-data_first150k.csv") 
+```
+
+### Introduction
+
+We are investigating wine ratings from wine enthusiasts. We chose this data because we understand that people relate to each other and share culture through wine drinking. According to a 2019 study by Forbes, the best ranked wine was from Napa Valley (https://www.forbes.com/sites/eustaciahuen/2019/03/25/wine-3/#6b2719750ed0). We are curious to see how and if this has changed.
+
+Our primary objective is to use this dataset to understand how to select the best wine. We hypothesize that the best wines are also the most expensive wines, come from France and Italy, and are described using positive descriptors.
+
+
+### Data Description
+
+User zackthoutt on Kaggle collected this data by scraping data from WineEnthusiast.com.
+
+A description of the columns of our data set are as follows
+
+- `X1`: Number corresponding to the observation. Listed in ascending order from 0
+- `country`: The country that the wine is from
+- `description`: A few sentences from a sommelier describing the wine's taste, smell, look, feel, etc.
+- `designation`: The vineyard within the winery where the grapes that made the wine are from
+- `points`: The number of points WineEnthusiast rated the wine on a scale of 1-100 (though they say they only post reviews for wines that score $\geq$ 80)
+- `price`: The cost for a bottle of the wine
+- `province`: The province or state that the wine is from
+- `region_1`: The wine growing area in a province or state (ie Napa)
+- `region_2`: Sometimes there are more specific regions specified within a wine growing area (ie Rutherford inside the Napa Valley), but this value can sometimes be blank
+- `variety`: The type of grapes used to make the wine (ie Pinot Noir)
+- `winery`: The winery that made the wine
+
+
+### Methodology
+ 
+We will perform the following tests and statistical methods to evaluate our research question.
+ 
+1. We will calculate on average which country has the highest rated wines by calculating the mean scores of each country and summarizing the data into a table. We will also visualize this data using a histogram.
+ 
+2. We will evaluate whether or not it is appropriate to use CLT based tests on the data set using ...
+ 
+3. We will use a CLT based t test to determine whether there is a statistically significant difference between the highest rated country's average score and the average wine score for all countries.
+ 
+4. We will calculate ratio of wine score and price and determine the best value wine for its price. We will visualize these ratios using a scatterplot and compare the weighted ratio versus actual price.
+** have countries be different colors
+ 
+5. We will calculate on average which variety of wine has the highest rating  by calculating the mean scores of each variety and summarizing the data into a table. We will also visualize this data using a histogram.
+ 
+6. We will use text analysis on the description variable to pick out key word descriptors in order to determine if there is there a relationship between the descriptor and the score. We will visualize this relationship.
+
+### Glimpse of data
+
+```{r}
+glimpse(wine_data)
+```
+
+### Results
+``` {r highest_average_score_by_country, echo = FALSE, warning = F, message = F}
+best_country <- wine_data %>%
+        filter(!is.na(country)) %>%
+        select(country, points) %>%
+        group_by(country) %>%
+        summarize(avg = mean(points)) %>%
+        arrange(desc(avg)) %>%
+        top_n(5)
+best_country
+```
+
+Contrary to our hypothesis, Italy and France are nowhere to be seen in the top 5 or even the top 10 average scoring countries. The top 5 countries with the highest average wine score are Australia, Austria, New Zealand, Switzerland, and Israel, in that order.
+
+
+``` {r average_wine_score_clt}
+t.test(wine_data$points,
+       mu = 90.93939,
+       alternative = "two.sided")
+```
+Here, we see that the overall mean of all wine scores is 88.88125 and has a 95% confidence interval or 88.82544 to 88.93706. This shows us that our observed average score of 90.93939 for Australia has statistical significance in its difference from the mean.
+
+
+``` {r weighted_wine_scores_to_price}
+wine_data
+weighted_avg <- wine_data %>%
+        summarize(winery, variety, price, points, weighted = points/price) %>%
+        arrange(desc(weighted))
+weighted_avg
+```
