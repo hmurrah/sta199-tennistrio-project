@@ -84,9 +84,19 @@ Here, we see that the overall mean of all wine scores is 88.88125 and has a 95% 
 ``` {r weighted_wine_scores_to_price}
 wine_data
 weighted_avg <- wine_data %>%
-        summarize(winery, variety, price, points, weighted = points/price) %>%
+        summarize(winery, variety, price, country, points, weighted = points/price) %>%
         arrange(desc(weighted))
 weighted_avg
+
+ggplot(data = weighted_avg, mapping = aes(
+                                  y = weighted, 
+                                      color = country)) +
+    geom_point() +
+    labs(title = "Distribution of PM2.5 levels",
+       subtitle = "by month of year",
+       x = "Month",
+       y = "PM2.5 level",
+       color = "season")
 ```
 
 
