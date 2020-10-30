@@ -87,6 +87,7 @@ weighted_avg <- wine_data %>%
         summarize(country, winery, variety, price, points, weighted = price/points) %>%
         arrange(weighted)
 weighted_avg
+<<<<<<< HEAD
 wine_data <- wine_data %>% 
        mutate(top_3 = if_else(country == "Australia" |
                                 country == "Austria" |
@@ -102,3 +103,13 @@ ggplot(data = wine_data, mapping = aes(x = points, y = price)) + geom_point() + 
 ```
 
 
+=======
+```
+
+
+
+
+
+
+### Discussion
+>>>>>>> 607f77a28d8bd6f088c8243220240c6355cb169f
