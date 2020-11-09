@@ -60,14 +60,43 @@ glimpse(wine_data)
 
 ### Results
 ``` {r highest_average_score_by_country, echo = FALSE, warning = F, message = F}
-best_country <- wine_data %>%
-        filter(!is.na(country)) %>%
-        select(country, points, price) %>%
-        group_by(country) %>%
-        summarize(avg = mean(points)) %>%
-        arrange(desc(avg)) %>%
-        top_n(5)
+country_counts <- wine_data %>%
+    group_by(country) %>%
+    count(country) %>%
+    filter(n >= 100)
+country_counts
+
+relevant_countries <- wine_data %>%
+    filter(!is.na(points) & !is.na(price)) %>%
+    filter(country %in% country_counts$country)
+relevant_countries
+
+best_country <- relevant_countries %>%
+    filter(!is.na(country)) %>%
+    select(country, points, price) %>%
+    group_by(country) %>%
+    summarize(avg = mean(points)) %>%
+    arrange(desc(avg)) %>%
+    top_n(3)
 best_country
+
+
+score_test <- wine_data %>%
+    filter(!is.na(country)) %>%
+    group_by(country) %>%
+    summarize(avg = mean(points))
+score_test
+
+
+weighted_avg_test <- wine_data %>%
+    group_by(country) %>%
+    mutate(weighted_count = (points/price))
+weighted_avg_test
+
+weighted_avg_test_2 <- weighted_avg_test %>%
+    group_by(country) %>%
+    count(country)
+weighted_avg_test_2
 ```
 
 Contrary to our hypothesis, Italy and France are nowhere to be seen in the top 5 or even the top 10 average scoring countries. The top 5 countries with the highest average wine score are Australia, Austria, New Zealand, Switzerland, and Israel, in that order.
@@ -82,24 +111,17 @@ t.test(wine_data$points,
 Here, we see that the overall mean of all wine scores is 88.88125 and has a 95% confidence interval or 88.82544 to 88.93706. This shows us that our observed average score of 90.93939 for Australia has statistical significance in its difference from the mean.
 
 ```{r weighted_wine_scores_to_price, message = FALSE, warning = FALSE, echo = FALSE}
-weighted_avg <- wine_data %>% 
-    summarize(country, winery, variety, price, country, points, weighted = points/price) %>%
-    arrange(desc(weighted))
-
+weighted_avg <- relevant_countries %>% 
+    mutate(weighted = log((points/price), base = exp(1))) %>% 
+    mutate(top_3 = if_else(country == "Austria" |
+                               country == "Germany" |
+                               country == "France",
+                           country, "Other"))
 weighted_avg
 
-weighted_avg <- wine_data %>% 
-    mutate(weighted = points/price) %>% 
-    mutate(top_3 = if_else(country == "Australia" |
-                               country == "Austria" |
-                               country == "New Zealand",
-                           country, "other"))
-weighted_avg
-
-
-ggplot(data = wine_data, mapping = aes(x = price, y = points)) + geom_point() + geom_smooth(method = "lm", se = F) + facet_wrap(~top_3)
-
-weighted_avg
+ggplot(data = weighted_avg, mapping = aes(x = price, y = weighted)) + 
+    geom_point() + 
+    geom_smooth(method = "lm", se = F) + facet_wrap(~top_3)
 
 ggplot(data = weighted_avg, mapping = aes(x = price, y = weighted, color = top_3)) +
     geom_smooth(method = "lm") +
@@ -107,6 +129,11 @@ ggplot(data = weighted_avg, mapping = aes(x = price, y = weighted, color = top_3
 ```
 *** we are trying to make graph that has countries on the x axis and a weighted count of wines on the y axis. the weighted count will be equal to the count of wines in the top 100 times the weighted points/ price score. 
 
+
+``` {r}
+m_points = glm(points ~ price + weighted, data = weighted_avg)
+tidy(m_points)
+```
 
 ```{r variety_average}
 variety_means <- wine_data %>% 
