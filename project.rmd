@@ -6,6 +6,7 @@ output: pdf_document
 ---
 ```{r packages-data, warning=FALSE, message=FALSE}
 library(tidyverse)
+library(tidytext)
 wine_data <- read_csv("data/winemag-data_first150k.csv") 
 ```
 
@@ -64,12 +65,10 @@ country_counts <- wine_data %>%
     group_by(country) %>%
     count(country) %>%
     filter(n >= 100)
-country_counts
 
 relevant_countries <- wine_data %>%
     filter(!is.na(points) & !is.na(price)) %>%
     filter(country %in% country_counts$country)
-relevant_countries
 
 best_country <- relevant_countries %>%
     filter(!is.na(country)) %>%
@@ -93,15 +92,204 @@ weighted_avg_test <- wine_data %>%
     mutate(weighted_count = (points/price))
 weighted_avg_test
 
-weighted_avg_test_2 <- weighted_avg_test %>%
-    group_by(country) %>%
-    count(country)
-weighted_avg_test_2
 ```
 
 Contrary to our hypothesis, Italy and France are nowhere to be seen in the top 5 or even the top 10 average scoring countries. The top 5 countries with the highest average wine score are Australia, Austria, New Zealand, Switzerland, and Israel, in that order.
 
 We recognize that this list of top 5 countries may not be an accurate representation of where the best wines come from, but rather a representation of what location on average has the wines with the highest point ratings. This calculation rewards countries with one highly rated wine and disadvantages countries that have wines represented in the data set with both very high and very low point values.
+
+```{r highest_average_points_by_variety, warning = F, message = F}
+variety_means <- wine_data %>% 
+    group_by(variety) %>% 
+    summarize(mean = mean(points)) %>% 
+    arrange(desc(mean)) %>% 
+    top_n(5)
+variety_means
+
+variety_counts <- wine_data %>%
+    group_by(variety) %>%
+    count(variety) %>%
+    filter(n >= 50)
+
+variety_means_more_than_50 <- wine_data %>%
+    group_by(variety) %>% 
+    summarize(mean = mean(points)) %>% 
+    arrange(desc(mean)) %>% 
+    filter(variety %in% variety_counts$variety) %>%
+    top_n(5)
+variety_means_more_than_50
+```
+
+
+
+What are the most commonly used words to describe a merlot for example. Is there a difference in the types of words used to describe the types of wines based on region, type, price.
+
+Are the presence of certain words associated with higher price. Fit a linear regression model. Definitely mention which words we also take out as stop words.
+``` {r sentiment_analysis_all_wine, message = F, warning = F}
+descriptions <- tibble(txt = wine_data$description)
+unnested_all <- descriptions %>%
+  unnest_tokens(word, txt) %>%
+    filter(word != "wine" & word != "flavors" & word != "palate" &
+               word != "drink" & word != "aromas" & word != "offers")
+unnested_all %>%
+  anti_join(get_stopwords(source = "smart")) %>%
+  count(word) %>%
+  arrange(desc(n)) %>%
+  top_n(20) %>%
+  ggplot(aes(fct_reorder(word, n), n)) +
+    geom_col() +
+    coord_flip() + 
+    theme_minimal() +
+    labs(title = "Frequency Of Descriptor Words In All Wines",
+         y = "",
+         x = "")
+```
+
+
+``` {r sentiment_analysis_top_5_varieties, message = F, warning = F}
+Gewürztraminer <- wine_data %>%
+    filter(variety == "Gewürztraminer")
+descriptions <- tibble(txt = Gewürztraminer$description)
+unnested_Gewürztraminer <- descriptions %>%
+  unnest_tokens(word, txt) %>%
+    filter(word != "wine" & word != "flavors" & word != "palate" &
+               word != "drink" & word != "aromas" & word != "offers" &
+               word != "finish" & word != "notes" & word != "long" &
+               word != "pinot" & word != "gris" & word != "generous" &
+               word != "hints" & word != "gewürztraminer" & word != "noir" &
+               word != "riesling" & word != "grüner" & word != "veltliner")
+unnested_Gewürztraminer %>%
+  anti_join(get_stopwords(source = "smart")) %>%
+  count(word) %>%
+  arrange(desc(n)) %>%
+  top_n(20) %>%
+  ggplot(aes(fct_reorder(word, n), n)) +
+    geom_col() +
+    coord_flip() + 
+    theme_minimal() +
+    labs(title = "Frequency Of Descriptor Words In Gewürztraminer Wines",
+         y = "",
+         x = "")
+
+Grüner_Veltliner <- wine_data %>%
+    filter(variety == "Grüner Veltliner")
+descriptions <- tibble(txt = Grüner_Veltliner$description)
+unnested_Grüner_Veltliner <- descriptions %>%
+  unnest_tokens(word, txt) %>%
+    filter(word != "wine" & word != "flavors" & word != "palate" &
+               word != "drink" & word != "aromas" & word != "offers" &
+               word != "finish" & word != "notes" & word != "long" &
+               word != "pinot" & word != "gris" & word != "generous" &
+               word != "hints" & word != "gewürztraminer" & word != "noir" &
+               word != "riesling" & word != "grüner" & word != "veltliner")
+unnested_Grüner_Veltliner %>%
+  anti_join(get_stopwords(source = "smart")) %>%
+  count(word) %>%
+  arrange(desc(n)) %>%
+  top_n(20) %>%
+  ggplot(aes(fct_reorder(word, n), n)) +
+    geom_col() +
+    coord_flip() + 
+    theme_minimal() +
+    labs(title = "Frequency Of Descriptor Words In Grüner Veltliner Wines",
+         y = "",
+         x = "")
+
+Pinot_Gris <- wine_data %>%
+    filter(variety == "Pinot Gris")
+descriptions <- tibble(txt = Pinot_Gris$description)
+unnested_Pinot_Gris <- descriptions %>%
+  unnest_tokens(word, txt) %>%
+    filter(word != "wine" & word != "flavors" & word != "palate" &
+               word != "drink" & word != "aromas" & word != "offers" &
+               word != "finish" & word != "notes" & word != "long" &
+               word != "pinot" & word != "gris" & word != "generous" &
+               word != "hints" & word != "gewürztraminer" & word != "noir" &
+               word != "riesling" & word != "grüner" & word != "veltliner")
+unnested_Pinot_Gris %>%
+  anti_join(get_stopwords(source = "smart")) %>%
+  count(word) %>%
+  arrange(desc(n)) %>%
+  top_n(20) %>%
+  ggplot(aes(fct_reorder(word, n), n)) +
+    geom_col() +
+    coord_flip() + 
+    theme_minimal() +
+    labs(title = "Frequency Of Descriptor Words In Pinot Gris Wines",
+         y = "",
+         x = "")
+
+Pinot_Noir <- wine_data %>%
+    filter(variety == "Pinot Noir")
+descriptions <- tibble(txt = Pinot_Noir$description)
+unnested_Pinot_Noir <- descriptions %>%
+  unnest_tokens(word, txt) %>%
+    filter(word != "wine" & word != "flavors" & word != "palate" &
+               word != "drink" & word != "aromas" & word != "offers" &
+               word != "finish" & word != "notes" & word != "long" &
+               word != "pinot" & word != "gris" & word != "generous" &
+               word != "hints" & word != "gewürztraminer" & word != "noir" &
+               word != "riesling" & word != "grüner" & word != "veltliner")
+unnested_Pinot_Noir %>%
+  anti_join(get_stopwords(source = "smart")) %>%
+  count(word) %>%
+  arrange(desc(n)) %>%
+  top_n(20) %>%
+  ggplot(aes(fct_reorder(word, n), n)) +
+    geom_col() +
+    coord_flip() + 
+    theme_minimal() +
+    labs(title = "Frequency Of Descriptor Words In Pinot Noir Wines",
+         y = "",
+         x = "")
+
+Riesling <- wine_data %>%
+    filter(variety == "Riesling")
+descriptions <- tibble(txt = Riesling$description)
+unnested_Riesling <- descriptions %>%
+  unnest_tokens(word, txt) %>%
+    filter(word != "wine" & word != "flavors" & word != "palate" &
+               word != "drink" & word != "aromas" & word != "offers" &
+               word != "finish" & word != "notes" & word != "long" &
+               word != "pinot" & word != "gris" & word != "generous" &
+               word != "hints" & word != "gewürztraminer" & word != "noir" &
+               word != "riesling" & word != "grüner" & word != "veltliner")
+unnested_Riesling %>%
+  anti_join(get_stopwords(source = "smart")) %>%
+  count(word) %>%
+  arrange(desc(n)) %>%
+  top_n(20) %>%
+  ggplot(aes(fct_reorder(word, n), n)) +
+    geom_col() +
+    coord_flip() + 
+    theme_minimal() +
+    labs(title = "Frequency Of Descriptor Words In Riesling Wines",
+         y = "",
+         x = "")
+```
+
+``` {r sentiment_analysis_price_over_100, warning = F, message = F}
+over_100 <- wine_data %>%
+    filter(price >= 100)
+descriptions <- tibble(txt = over_100$description)
+unnested_over_100 <- descriptions %>%
+  unnest_tokens(word, txt) %>%
+    filter(word != "wine" & word != "flavors" & word != "palate" &
+               word != "drink" & word != "aromas" & word != "offers" &
+               word != "finish" & word != "notes" & word != "long")
+unnested_Gewürztraminer %>%
+  anti_join(get_stopwords(source = "smart")) %>%
+  count(word) %>%
+  arrange(desc(n)) %>%
+  top_n(20) %>%
+  ggplot(aes(fct_reorder(word, n), n)) +
+    geom_col() +
+    coord_flip() + 
+    theme_minimal() +
+    labs(title = "Frequency Of Descriptor Words In Expensive Wines",
+         y = "",
+         x = "")
+```
 
 ``` {r average_wine_score_clt, message = FALSE, warning = FALSE, echo = FALSE}
 t.test(wine_data$points,
@@ -131,17 +319,9 @@ ggplot(data = weighted_avg, mapping = aes(x = price, y = weighted, color = top_3
 
 
 ``` {r}
-m_points = glm(points ~ price + weighted, data = weighted_avg)
+m_points = glm(price ~ points, data = weighted_avg)
 tidy(m_points)
 ```
 
-```{r variety_average}
-variety_means <- wine_data %>% 
-        group_by(variety) %>% 
-        summarize(mean = mean(points)) %>% 
-        arrange(desc(mean)) %>% 
-        top_n(15)
 
-variety_means
-```
 ### Discussion
