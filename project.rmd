@@ -84,6 +84,7 @@ Here, we see that the overall mean of all wine scores is 88.88125 and has a 95% 
 
 ``` {r weighted_wine_scores_to_price, message = FALSE, warning = FALSE}
 weighted_avg <- wine_data %>%
+    group_by(country)%>%
     summarize(country, winery, variety, price, country, points, weighted = points/price) %>%
         arrange(desc(weighted))
 weighted_avg
