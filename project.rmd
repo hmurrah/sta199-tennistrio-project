@@ -97,9 +97,11 @@ weighted_avg <- wine_data %>%
 weighted_avg
 
 
-ggplot(data = wine_data, mapping = aes(x = price, y = points)) + geom_point() + geom_smooth(method = "lm", se = F) + facet_wrap(~top_3)
+
 
 weighted_avg
+
+ggplot(data = wine_data, mapping = aes(x = price, y = points)) + geom_point() + geom_smooth(method = "lm", se = F) + facet_wrap(~top_3)
 
 ggplot(data = weighted_avg, mapping = aes(x = price, y = weighted, color = top_3)) +
     geom_smooth(method = "lm") +
