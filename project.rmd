@@ -12,9 +12,8 @@ wine_data <- read_csv("data/winemag-data_first150k.csv")
 
 ### Introduction
 
-People have cultivated and appreciated wines for millennia. In fact, the oldest known winery was found in a cave outside of a village in Armenia and dates back to 4,100 BC. Since then, wine production and consumption spread throughout the globe and become a important part of many cultures. Today, wine is largely used as a celebratory drink during activities like weddings or holidays. Fine wines are often more expensive and associated with higher societal status or class. 
+People have cultivated and appreciated wines for millennia. In fact, the oldest known winery was found in a cave outside of a village in Armenia and dates back to 4,100 BC. Since then, wine production and consumption spread throughout the globe and become a important part of many cultures. Today, wine is largely used as a celebratory drink during activities like weddings or holidays. Fine wines are often more expensive and associated with higher societal status or class (https://winefolly.com/deep-dive/where-did-wine-come-from/#:~:text=Ancient%20wine%20production%20evidence%20dates,grape%20domestication%20in%20eastern%20Turkey). 
 
-Most current wine production happens in Europe. In 2019, Italy produced 21.6 million hectoliters of wine and was the world's largest wine producer. The next two largest wine producers that year were Spain and France, producing 21.3 million hectoliters and 14.2 million hectoliters respectively. Nevertheless, a 2019 survey from Forbes found that the the best ranked wine was from Napa Valley in the United States (https://www.forbes.com/sites/eustaciahuen/2019/03/25/wine-3/#6b2719750ed0). We are curious to see if this has changed.
 
 We investigated wine ratings from wine enthusiasts around the globe using wine ranking data scraped from WineEnthusiast.com.
 
@@ -394,3 +393,7 @@ tidy(m_points)
 
 
 ### Discussion
+
+
+
+### References
