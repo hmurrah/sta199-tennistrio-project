@@ -377,6 +377,20 @@ ggplot(data = top_countries, mapping = aes(points)) +
   geom_density() + 
   facet_wrap(~country)
 ```
+```{r}
+
+wine_data_over_90 <- wine_data %>%
+  filter (points >= 95)%>%
+  filter (price > 75)
+
+ggplot(data = wine_data_over_90, mapping = aes(x = price, y = points )) + 
+  geom_point()
+
+
+lm
+```
+
+
 
 ### Discussion
 
