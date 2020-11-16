@@ -58,7 +58,7 @@ We will perform the following tests and statistical methods to evaluate our rese
 
 ### Glimpse of data
 
-```{r}
+```{r, echo = FALSE}
 glimpse(wine_data)
 ```
 
@@ -79,27 +79,26 @@ best_country <- relevant_countries %>%
     group_by(country) %>%
     summarize(avg = mean(points)) %>%
     arrange(desc(avg)) %>%
-    top_n(3)
+    top_n(5)
 best_country
 
 score_test <- wine_data %>%
     filter(!is.na(country)) %>%
     group_by(country) %>%
     summarize(avg = mean(points))
-score_test
 
 weighted_avg_test <- wine_data %>%
     group_by(country) %>%
     mutate(weighted_count = (points/price))
-weighted_avg_test
+
 
 ```
 
-Contrary to our hypothesis, Italy and France are nowhere to be seen in the top 5 or even the top 10 average scoring countries. The top 5 countries with the highest average wine score are Australia, Austria, New Zealand, Switzerland, and Israel, in that order.
+Contrary to our hypothesis, Italy and France are nowhere to be seen in the top 5 or even the top 10 average scoring countries. The top 5 countries with the highest average wine score are Austria, Germany, France, US, and Italy in that order.
 
 We recognize that this list of top 5 countries may not be an accurate representation of where the best wines come from, but rather a representation of what location on average has the wines with the highest point ratings. This calculation rewards countries with one highly rated wine and disadvantages countries that have wines represented in the data set with both very high and very low point values.
 
-```{r highest_average_points_by_variety, warning = F, message = F}
+```{r highest_average_points_by_variety, warning = F, message = F, echo= FALSE}
 variety_means <- wine_data %>% 
     group_by(variety) %>% 
     summarize(mean = mean(points)) %>% 
@@ -124,49 +123,12 @@ variety_means_more_than_50
 We calculated the top 5 best rated varieties of wine similarly. Our first calculation returned Cabernet-Shiraz, Cabernet Sauvignon-Shiraz, Blauburgunder, Friulano, and Carignan as the top rated wine varieties. However, after observing the data, we noticed that these wine varieties had a relatively small number of wines represented in the entire data set. To try to better represent the varieties of wines with consistently top rated products, we filtered to only include wine varieties with at least 50 wines ratings represented in the data set. The top varieties presented in this calculation were Gewürztraminer, Grüner Veltliner, Pinot Gris, Pinot Noir, and Riesling. 
 
 
-```{r}
+```{r, echo = FALSE}
 
-# I was trying to visualize all point values on a scatter plot and color by either top 5 varieties or not, then color by either top 5 countries or not and then also create a linear model with country and variety as factors. It looks like there is a problem with the variety variable that I tried to create. It shows up as countries instead of varieties and im not quite sure why.
+# make density plots of the top 5 varieties, add the density plots of the top 5 countries
 
-
-countryvar <- wine_data %>%
-  mutate(top_countries = if_else(country == "Austria" |
-                               country == "Germany" |
-                               country == "France",
-                           country, "Other"))
-
-ggplot(data = countryvar, mapping = aes(y = points, x = price, color = top_countries)) + 
-    geom_point()
-  
-
-varietyvar <- wine_data %>%
-  mutate(top_varieties = if_else(variety == "Cabernet-Shiraz" |
-                               variety == "Cabernet Sauvignon-Shiraz" |
-                               variety == "Blauburgunder",
-                           country, "Other"))
-
-ggplot(data = varietyvar, mapping = aes(x = price, y = points, color = top_varieties)) + 
-    geom_point()
-
-varietyvar2 <- wine_data %>%
-  mutate(top_varieties2 = if_else(variety == "Gewürztraminer" |
-                               variety == "Grüner Veltliner" |
-                               variety == "Pinot Gris",
-                           country, "Other"))
-
-ggplot(data = varietyvar2, mapping = aes(x = price, y = points, color = top_varieties2)) + 
-    geom_point()
-
-
-lmthingy <- wine_data %>%
-  mutate(top_countries = if_else(country == "Austria" |
-                               country == "Germany" |
-                               country == "France",
-                           country, "Other")) %>%
-  mutate(top_varieties2 = if_else(variety == "Gewürztraminer" |
-                               variety == "Grüner Veltliner" |
-                               variety == "Pinot Gris",
-                           country, "Other")) 
+# make a linear model of top 5 countries and top 5 varieties
+ 
 modell <- lm(points ~ top_countries + top_varieties2, data = lmthingy)
 tidy(modell)
 
@@ -181,7 +143,7 @@ tidy(modell)
 What are the most commonly used words to describe a merlot for example. Is there a difference in the types of words used to describe the types of wines based on region, type, price.
 
 Are the presence of certain words associated with higher price. Fit a linear regression model. Definitely mention which words we also take out as stop words.
-``` {r sentiment_analysis_all_wine, message = F, warning = F}
+``` {r sentiment_analysis_all_wine, message = F, warning = F, echo = FALSE}
 descriptions <- tibble(txt = wine_data$description)
 unnested_all <- descriptions %>%
   unnest_tokens(word, txt) %>%
@@ -202,7 +164,7 @@ unnested_all %>%
 ```
 
 
-``` {r sentiment_analysis_top_5_varieties, message = F, warning = F}
+``` {r sentiment_analysis_top_5_varieties, message = F, warning = F, echo = FALSE}
 Gewürztraminer <- wine_data %>%
     filter(variety == "Gewürztraminer")
 descriptions <- tibble(txt = Gewürztraminer$description)
@@ -324,7 +286,7 @@ unnested_Riesling %>%
          y = "Frequency")
 ```
 
-``` {r sentiment_analysis_price_over_100, warning = F, message = F}
+``` {r sentiment_analysis_price_over_100, warning = F, message = F, echo = FALSE}
 over_100 <- wine_data %>%
     filter(price >= 100)
 descriptions <- tibble(txt = over_100$description)
@@ -356,19 +318,18 @@ Here, we see that the overall mean of all wine scores is 88.88125 and has a 95% 
 
 
 
-``` {r weighted_wine_scores_to_price, message = FALSE, warning = FALSE}
+``` {r weighted_wine_scores_to_price, message = FALSE, warning = FALSE, echo = FALSE}
 weighted_avg <- wine_data %>%
     group_by(country)%>%
     summarize(country, winery, variety, price, country, points, weighted = points/price) %>%
         arrange(desc(weighted))
 ```
 
-```{r weighted_wine_scores_to_price, message = FALSE, warning = FALSE, echo = FALSE}
-
+```{r weighted_wine_scores_to_price2, message = FALSE, warning = FALSE, echo = FALSE}
 
 weighted_avg
-
-ggplot(data = wine_data, mapping = aes(x = price, y = points)) + geom_point() + geom_smooth(method = "lm", se = F) + facet_wrap(~top_3)
+# 
+# ggplot(data = wine_data, mapping = aes(x = price, y = points)) + geom_point() + geom_smooth(method = "lm", se = F) + facet_wrap(~top_3)
 
 weighted_avg <- relevant_countries %>% 
     mutate(weighted = log((points/price), base = exp(1))) %>% 
@@ -383,6 +344,7 @@ ggplot(data = weighted_avg, mapping = aes(x = price, y = weighted)) +
     geom_point() + 
     geom_smooth(method = "lm", se = F) + facet_wrap(~top_3)
 
+
 ggplot(data = weighted_avg, mapping = aes(x = price, y = weighted, color = top_3)) +
     geom_smooth(method = "lm") +
     geom_point()
@@ -390,13 +352,35 @@ ggplot(data = weighted_avg, mapping = aes(x = price, y = weighted, color = top_3
 *** we are trying to make graph that has countries on the x axis and a weighted count of wines on the y axis. the weighted count will be equal to the count of wines in the top 100 times the weighted points/ price score. 
 
 
-``` {r}
+``` {r, echo = FALSE}
 m_points = glm(price ~ points, data = weighted_avg)
 tidy(m_points)
 ```
 
+```{r, echo = FALSE}
+country_counts <- wine_data %>%
+    group_by(country) %>%
+    count(country) %>%
+    filter(n >= 100)
+
+country_counts
+
+
+top_countries <- wine_data %>% 
+  filter(country == "Austria" |
+           country == "Germany" |
+           country == "France" |
+           country == "US" |
+           country == "Italy")
+
+ggplot(data = top_countries, mapping = aes(points)) + 
+  geom_density() + 
+  facet_wrap(~country)
+```
 
 ### Discussion
+
+points to bring up: austria is the best. more expensive wines are better up to a point (need to determine this point, use a linear model)
 
 
 
