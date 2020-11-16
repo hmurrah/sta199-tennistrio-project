@@ -365,14 +365,10 @@ weighted_avg <- wine_data %>%
 ```
 
 ```{r weighted_wine_scores_to_price, message = FALSE, warning = FALSE, echo = FALSE}
-
-<<<<<<< HEAD
-
-
 weighted_avg
 
 ggplot(data = wine_data, mapping = aes(x = price, y = points)) + geom_point() + geom_smooth(method = "lm", se = F) + facet_wrap(~top_3)
-=======
+
 weighted_avg <- relevant_countries %>% 
     mutate(weighted = log((points/price), base = exp(1))) %>% 
     mutate(top_3 = if_else(country == "Austria" |
@@ -385,7 +381,7 @@ weighted_avg
 ggplot(data = weighted_avg, mapping = aes(x = price, y = weighted)) + 
     geom_point() + 
     geom_smooth(method = "lm", se = F) + facet_wrap(~top_3)
->>>>>>> b951594a1f6a6c05f34bf4cd9b176a471a6d7d01
+
 
 ggplot(data = weighted_avg, mapping = aes(x = price, y = weighted, color = top_3)) +
     geom_smooth(method = "lm") +
@@ -399,6 +395,25 @@ m_points = glm(price ~ points, data = weighted_avg)
 tidy(m_points)
 ```
 
+```{r}
+country_counts <- wine_data %>%
+    group_by(country) %>%
+    count(country) %>%
+    filter(n >= 100)
+
+
+top_countries <- wine_data %>% 
+  filter(country == "Germany" |
+           country == "France" |
+           country == "Italy" |
+           country == "Austria" |
+           country == "Spain" |
+           country == "Portugal")
+
+ggplot(data = top_countries, mapping = aes(points)) + 
+  geom_density() + 
+  facet_wrap(~country)
+```
 
 ### Discussion
 
