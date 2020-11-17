@@ -234,9 +234,10 @@ unnested_Gewürztraminer <- descriptions %>%
                word != "finish" & word != "notes" & word != "long" &
                word != "pinot" & word != "gris" & word != "generous" &
                word != "hints" & word != "gewürztraminer" & word != "noir" &
-               word != "riesling" & word != "grüner" & word != "veltliner")
+               word != "riesling" & word != "grüner" & word != "veltliner" &
+               word != "nose" & word != "fresh") %>%
+  anti_join(get_stopwords(source = "smart"))
 unnested_Gewürztraminer %>%
-  anti_join(get_stopwords(source = "smart")) %>%
   count(word) %>%
   arrange(desc(n)) %>%
   top_n(20) %>%
@@ -258,9 +259,10 @@ unnested_Grüner_Veltliner <- descriptions %>%
                word != "finish" & word != "notes" & word != "long" &
                word != "pinot" & word != "gris" & word != "generous" &
                word != "hints" & word != "gewürztraminer" & word != "noir" &
-               word != "riesling" & word != "grüner" & word != "veltliner")
+               word != "riesling" & word != "grüner" & word != "veltliner" &
+               word != "nose" & word != "fresh") %>%
+  anti_join(get_stopwords(source = "smart"))
 unnested_Grüner_Veltliner %>%
-  anti_join(get_stopwords(source = "smart")) %>%
   count(word) %>%
   arrange(desc(n)) %>%
   top_n(20) %>%
@@ -282,9 +284,10 @@ unnested_Pinot_Gris <- descriptions %>%
                word != "finish" & word != "notes" & word != "long" &
                word != "pinot" & word != "gris" & word != "generous" &
                word != "hints" & word != "gewürztraminer" & word != "noir" &
-               word != "riesling" & word != "grüner" & word != "veltliner")
+               word != "riesling" & word != "grüner" & word != "veltliner" &
+               word != "nose" & word != "fresh") %>%
+  anti_join(get_stopwords(source = "smart"))
 unnested_Pinot_Gris %>%
-  anti_join(get_stopwords(source = "smart")) %>%
   count(word) %>%
   arrange(desc(n)) %>%
   top_n(20) %>%
@@ -306,9 +309,10 @@ unnested_Pinot_Noir <- descriptions %>%
                word != "finish" & word != "notes" & word != "long" &
                word != "pinot" & word != "gris" & word != "generous" &
                word != "hints" & word != "gewürztraminer" & word != "noir" &
-               word != "riesling" & word != "grüner" & word != "veltliner")
+               word != "riesling" & word != "grüner" & word != "veltliner" &
+               word != "nose" & word != "fresh") %>%
+  anti_join(get_stopwords(source = "smart"))
 unnested_Pinot_Noir %>%
-  anti_join(get_stopwords(source = "smart")) %>%
   count(word) %>%
   arrange(desc(n)) %>%
   top_n(20) %>%
@@ -330,9 +334,10 @@ unnested_Riesling <- descriptions %>%
                word != "finish" & word != "notes" & word != "long" &
                word != "pinot" & word != "gris" & word != "generous" &
                word != "hints" & word != "gewürztraminer" & word != "noir" &
-               word != "riesling" & word != "grüner" & word != "veltliner")
+               word != "riesling" & word != "grüner" & word != "veltliner" &
+               word != "nose" & word != "fresh") %>%
+  anti_join(get_stopwords(source = "smart"))
 unnested_Riesling %>%
-  anti_join(get_stopwords(source = "smart")) %>%
   count(word) %>%
   arrange(desc(n)) %>%
   top_n(20) %>%
@@ -343,6 +348,52 @@ unnested_Riesling %>%
     labs(title = "Frequency Of Descriptor Words In Riesling Wines",
          x = "Descriptor Words",
          y = "Frequency")
+
+all_other_wines <- wine_data %>%
+  filter(variety != "Gewürztraminer" & variety != "Grüner Veltliner" &
+           variety != "Pinot Gris" & variety != "Pinot Noir" &
+           variety != "Reisling")
+descriptions <- tibble(txt = all_other_wines$description)
+unnested_all <- descriptions %>%
+  unnest_tokens(word, txt) %>%
+    filter(word != "wine" & word != "flavors" & word != "palate" &
+               word != "drink" & word != "aromas" & word != "offers" &
+               word != "finish" & word != "notes" & word != "long" &
+               word != "generous" & word != "hints" & word != "nose" &
+               word != "fresh") %>%
+  anti_join(get_stopwords(source = "smart"))
+unnested_all %>%
+  count(word) %>%
+  arrange(desc(n)) %>%
+  top_n(20) %>%
+  ggplot(aes(fct_reorder(word, n), n)) +
+    geom_col() +
+    coord_flip() + 
+    theme_minimal() +
+    labs(title = "Frequency Of Descriptor Words In Riesling Wines",
+         x = "Descriptor Words",
+         y = "Frequency")
+```
+
+``` {r descriptor_word_differences, message = F, warning = F, echo = F}
+top_5_descriptors <- tibble(word = union_all(unnested_Gewürztraminer$word, 
+               unnested_Grüner_Veltliner$word,
+               unnested_Pinot_Gris$word,
+               unnested_Pinot_Noir$word,
+               unnested_Riesling$word))
+top_5_descriptor_counts <- top_5_descriptors %>%
+  count(word) %>%
+  mutate(prob = round(n/sum(n),4)) %>%
+  arrange(desc(prob)) %>%
+  top_n(10)
+top_5_descriptor_counts
+
+all_descriptor_counts <- unnested_all %>%
+  count(word) %>%
+  mutate(prob = round(n/sum(n),4)) %>%
+  arrange(desc(prob)) %>%
+  top_n(10)
+all_descriptor_counts
 ```
 
 ``` {r sentiment_analysis_price_over_100, warning = F, message = F, echo = FALSE}
