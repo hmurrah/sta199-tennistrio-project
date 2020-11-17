@@ -57,7 +57,7 @@ We performed the following tests and statistical methods to evaluate our researc
  
 4. We used a CLT based t test to determine whether there is a statistically significant difference between the highest rated country's average score and the average wine score for all countries.
 
-5. We created density plots for the point distribution for the top 5 varieties and top 5 countries. [NEED TO DO THIS FOR VARIETIES]
+5. We created density plots for the point distribution for the top 5 varieties and top 5 countries. 
 
 6. We created similar density plots for the price distribution for the top 5 varieties and top 5 countries. [STILL NEED TO DO THIS]
  
@@ -389,12 +389,22 @@ ggplot(data = weighted_avg, mapping = aes(x = price, y = weighted)) +
     geom_point() + 
     geom_smooth(method = "lm", se = F) + facet_wrap(~top_3)
 
-
-ggplot(data = weighted_avg, mapping = aes(x = price, y = weighted, color = top_3)) +
-    geom_smooth(method = "lm") +
-    geom_point()
 ```
 *** we are trying to make graph that has countries on the x axis and a weighted count of wines on the y axis. the weighted count will be equal to the count of wines in the top 100 times the weighted points/ price score. 
+
+
+```{r}
+
+austria <- relevant_countries %>% 
+    mutate(weighted = log((price/points), base = exp(1))) %>% 
+    filter (country == "Austria")
+
+
+ggplot(data = austria, mapping = aes(x = price, y = weighted)) + 
+    geom_point() + 
+    geom_smooth(method = "lm", se = F) 
+
+```
 
 
 ``` {r, echo = FALSE}
@@ -402,18 +412,7 @@ m_points = glm(price ~ points, data = weighted_avg)
 tidy(m_points)
 ```
 
-```{r}
 
-wine_data_over_90 <- wine_data %>%
-  filter (points >= 95)%>%
-  filter (price > 75)
-
-ggplot(data = wine_data_over_90, mapping = aes(x = price, y = points )) + 
-  geom_point()
-
-
-lm
-```
 ### Results
 
 
