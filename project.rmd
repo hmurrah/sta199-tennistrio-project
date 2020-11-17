@@ -47,15 +47,22 @@ glimpse(wine_data)
 ```
 ### Methodology
  
-We performed the following tests and statistical methods to evaluate our research question.
  
-1. We calculated on average which countries have the highest rated wines by finding the mean scores of each country and summarizing the data into a table. We did the same calculation for top varieties of wine.
+We first calculated on average which countries have the highest rated wines by finding the mean scores of each country and summarizing the data into a table. We did the same calculation for top varieties of wine.
 
-2. We created a linear model to predict the number of points that a wine would receive depending on whether or not it was made in a top country or not and whether it was a top variety or not.
+We then created density plots for the point distribution for the top 5 varieties and top 5 countries. 
  
-3. We evaluated whether or not it is appropriate to use CLT based tests. [STILL NEED TO DO THIS]
+We conducted the following additional tests to evaluate our hypothesis and explore the data set. 
+
+1. We created a linear model to predict the number of points that a wine would receive depending on whether or not it was made in a top country or not and whether it was a top variety or not.
  
-4. We used a CLT based t test to determine whether there is a statistically significant difference between the highest rated country's average score and the average wine score for all countries.
+ 
+2. We used a CLT based t test to determine whether there is a statistically significant difference between the highest rated country's average score and the average wine score for all countries.
+
+We know that it is appropriate to use a CLT based test based after doing the following evaluation. 
+
+
+
 
 5. We will calculate on average which variety of wine has the highest rating by calculating the mean scores of each variety and summarizing the data into a table. 
 
@@ -497,6 +504,19 @@ tidy(m_points)
 
 ### Results
 
+Top Countries: 
+
+
+Linear Model: 
+
+
+CLT Test: 
+
+
+Density Plots: 
+
+
+Sentiment Analysis: 
 
 ### Discussion
 
