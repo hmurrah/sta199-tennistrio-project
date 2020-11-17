@@ -61,14 +61,11 @@ We performed the following tests and statistical methods to evaluate our researc
 
 6. We created similar density plots for the price distribution for the top 5 varieties and top 5 countries. [STILL NEED TO DO THIS]
  
-7. We will calculate ratio of wine score and price and deter
-
-mine the best value wine for its price. We will visualize these ratios using a scatterplot and compare the weighted ratio versus actual price.
 ** have countries be different colors
  
-6. We will calculate on average which variety of wine has the highest rating  by calculating the mean scores of each variety and summarizing the data into a table. We will also visualize this data using a histogram.
+7. We will calculate on average which variety of wine has the highest rating by calculating the mean scores of each variety and summarizing the data into a table. We will also visualize this data using a histogram.
  
-7. We will use text analysis on the description variable to pick out key word descriptors in order to determine if there is there a relationship between the descriptor and the score. We will visualize this relationship.
+8. We will use text analysis on the description variable to pick out key word descriptors in order to determine if there is there a relationship between the descriptor and the score. We will visualize this relationship.
 
 
 Countries with Highest Average Wine Point Score
@@ -102,7 +99,6 @@ weighted_avg_test <- wine_data %>%
 
 
 ```
-
 Contrary to our hypothesis, Italy and France were not the top two countries. Both Austria and Germany had on average higher point ratings for their wines than these two countries. The top 5 countries with the highest average wine score are Austria, Germany, France, US, and Italy in that order.
 
 We recognize that this list of top 5 countries may not be an accurate representation of where the best wines come from, but rather a representation of what location on average has the wines with the highest point ratings. This calculation rewards countries with one highly rated wine and disadvantages countries that have wines represented in the data set with both very high and very low point values.
@@ -185,6 +181,22 @@ ggplot(data = top_countries, mapping = aes(points)) +
   geom_density() + 
   facet_wrap(~country)
 ```
+
+```{r, echo= FALSE}
+
+top_var <- wine_data %>% 
+  filter(variety == "Gewürztraminer" |
+           variety == "Grüner Veltliner" |
+           variety == "Pinot Gris" |
+           variety == "Pinot Noir" |
+           variety == "Riesling")
+
+ggplot(data = top_var, mapping = aes(points)) + 
+  geom_density() + 
+  facet_wrap(~variety)
+
+```
+
 
 
 What are the most commonly used words to describe a merlot for example. Is there a difference in the types of words used to describe the types of wines based on region, type, price.
