@@ -12,13 +12,14 @@ wine_data <- read_csv("data/winemag-data_first150k.csv")
 
 ### Introduction
 
-People have cultivated and appreciated wines for millennia. In fact, the oldest known winery was found in a cave outside of a village in Armenia and dates back to 4,100 BC. Since then, wine production and consumption spread throughout the globe and become a important part of many cultures. Today, wine is largely used as a celebratory drink during activities like weddings or holidays. Fine wines are often more expensive and associated with higher societal status or class (https://winefolly.com/deep-dive/where-did-wine-come-from/#:~:text=Ancient%20wine%20production%20evidence%20dates,grape%20domestication%20in%20eastern%20Turkey). 
+People have cultivated and appreciated wines for millennia. In fact, the oldest known winery was found in a cave outside of a village in Armenia and dates back to 4,100 BC. Since then, wine production and consumption spread throughout the globe and become a important part of many cultures. Today, wine is largely used as a celebratory drink during activities like weddings or holidays. Fine wines are often more expensive and associated with higher societal status or class (https://winefolly.com/deep-dive/where-did-wine-come-from/#:~:text=Ancient%20wine%20production%20evidence%20dates,grape%20domestication%20in%20eastern%20Turkey)
+.
+
+Most current wine production happens in Europe. In 2019, Italy produced 21.6 million hectoliters of wine and was the world's largest wine producer. The next two largest wine producers that year were Spain and France, producing 21.3 million hectoliters and 14.2 million hectoliters respectively. Nevertheless, a 2019 survey from Forbes found that the the best ranked wine was from Napa Valley in the United States (https://www.forbes.com/sites/eustaciahuen/2019/03/25/wine-3/#6b2719750ed0). We are curious to see if this has changed.
 
 We investigated wine ratings from wine enthusiasts around the globe using wine ranking data scraped from WineEnthusiast.com.
 
 Our main motivation for investigating wine data is pure interest and desire to understand how to select the best wine. We are specifically interested in how the perceived quality of these wines varies based on where they were produced. Additionally, we want to understand what words wine enthusiasts use to describe highly rated wines versus lower rated wines. Finally, in an attempt to find the best wine to buy, we want to investigate and characterize what wines have the best value for their rating. We hypothesize that the best wines are also the most expensive wines, come from France and Italy, and are described using positive descriptors.
-
-
 
 ### Data Description
 
@@ -39,30 +40,38 @@ A description of the columns of our data set are as follows
 - `winery`: The winery that made the wine
 
 
-### Methodology
- 
-We will perform the following tests and statistical methods to evaluate our research question.
- 
-1. We will calculate on average which country has the highest rated wines by calculating the mean scores of each country and summarizing the data into a table. We will also visualize this data using a histogram.
- 
-2. We will evaluate whether or not it is appropriate to use CLT based tests on the data set using ...
- 
-3. We will use a CLT based t test to determine whether there is a statistically significant difference between the highest rated country's average score and the average wine score for all countries.
- 
-4. We will calculate ratio of wine score and price and determine the best value wine for its price. We will visualize these ratios using a scatterplot and compare the weighted ratio versus actual price.
-** have countries be different colors
- 
-5. We will calculate on average which variety of wine has the highest rating  by calculating the mean scores of each variety and summarizing the data into a table. We will also visualize this data using a histogram.
- 
-6. We will use text analysis on the description variable to pick out key word descriptors in order to determine if there is there a relationship between the descriptor and the score. We will visualize this relationship.
-
 ### Glimpse of data
 
 ```{r, echo = FALSE}
 glimpse(wine_data)
 ```
+### Methodology
+ 
+We performed the following tests and statistical methods to evaluate our research question.
+ 
+1. We calculated on average which countries have the highest rated wines by finding the mean scores of each country and summarizing the data into a table. We did the same calculation for top varieties of wine.
 
-### Results
+2. We created a linear model to predict the number of points that a wine would receive depending on whether or not it was made in a top country or not and whether it was a top variety or not.
+ 
+3. We evaluated whether or not it is appropriate to use CLT based tests. [STILL NEED TO DO THIS]
+ 
+4. We used a CLT based t test to determine whether there is a statistically significant difference between the highest rated country's average score and the average wine score for all countries.
+
+5. We created density plots for the point distribution for the top 5 varieties and top 5 countries. [NEED TO DO THIS FOR VARIETIES]
+
+6. We created similar density plots for the price distribution for the top 5 varieties and top 5 countries. [STILL NEED TO DO THIS]
+ 
+7. We will calculate ratio of wine score and price and deter
+
+mine the best value wine for its price. We will visualize these ratios using a scatterplot and compare the weighted ratio versus actual price.
+** have countries be different colors
+ 
+6. We will calculate on average which variety of wine has the highest rating  by calculating the mean scores of each variety and summarizing the data into a table. We will also visualize this data using a histogram.
+ 
+7. We will use text analysis on the description variable to pick out key word descriptors in order to determine if there is there a relationship between the descriptor and the score. We will visualize this relationship.
+
+
+Countries with Highest Average Wine Point Score
 ``` {r highest_average_score_by_country, echo = FALSE, warning = F, message = F}
 country_counts <- wine_data %>%
     group_by(country) %>%
@@ -94,10 +103,11 @@ weighted_avg_test <- wine_data %>%
 
 ```
 
-Contrary to our hypothesis, Italy and France are nowhere to be seen in the top 5 or even the top 10 average scoring countries. The top 5 countries with the highest average wine score are Austria, Germany, France, US, and Italy in that order.
+Contrary to our hypothesis, Italy and France were not the top two countries. Both Austria and Germany had on average higher point ratings for their wines than these two countries. The top 5 countries with the highest average wine score are Austria, Germany, France, US, and Italy in that order.
 
 We recognize that this list of top 5 countries may not be an accurate representation of where the best wines come from, but rather a representation of what location on average has the wines with the highest point ratings. This calculation rewards countries with one highly rated wine and disadvantages countries that have wines represented in the data set with both very high and very low point values.
 
+Varieties with Highest Average Wine Point Score
 ```{r highest_average_points_by_variety, warning = F, message = F, echo= FALSE}
 variety_means <- wine_data %>% 
     group_by(variety) %>% 
@@ -128,16 +138,53 @@ We calculated the top 5 best rated varieties of wine similarly. Our first calcul
 # make density plots of the top 5 varieties, add the density plots of the top 5 countries
 
 # make a linear model of top 5 countries and top 5 varieties
+
+
+lmthingy <- wine_data %>%
+  mutate (top_countries = ifelse(country == "Austria" | country == "France"| country == "US" | country == "Italy" | country == "Germany", 1, 0)) %>%
+  mutate (top_varieties = ifelse(variety == "Gewürztraminer" | variety == "Grüner Veltliner"| variety == "Pinot Gris" | variety == "Pinot Noir" | variety == "Riesling", 1, 0))
+
+lmthingy
  
-modell <- lm(points ~ top_countries + top_varieties2, data = lmthingy)
+modell <- lm(points ~ top_countries + top_varieties, data = lmthingy)
 tidy(modell)
 
-  
-  
 
 ```
 
+predicted points = 88.13 + 0.66(topcountry) + 1.145(topvariety)
 
+This is a linear model that shows the predicted number of points for a particular wine given whether or not the wine is from a top country and whether or not the wine is from a top variety.
+
+
+
+``` {r average_wine_score_clt, message = FALSE, warning = FALSE, echo = FALSE}
+t.test(wine_data$points,
+       mu = 90.93939,
+       alternative = "two.sided")
+```
+Here, we see that the overall mean of all wine scores is 88.88125 and has a 95% confidence interval or 88.82544 to 88.93706. This shows us that our observed average score of 90.79 for the top rated wine country (Austria) has statistical significance in its difference from the mean.
+
+```{r, echo = FALSE}
+country_counts <- wine_data %>%
+    group_by(country) %>%
+    count(country) %>%
+    filter(n >= 100)
+
+country_counts
+
+
+top_countries <- wine_data %>% 
+  filter(country == "Austria" |
+           country == "Germany" |
+           country == "France" |
+           country == "US" |
+           country == "Italy")
+
+ggplot(data = top_countries, mapping = aes(points)) + 
+  geom_density() + 
+  facet_wrap(~country)
+```
 
 
 What are the most commonly used words to describe a merlot for example. Is there a difference in the types of words used to describe the types of wines based on region, type, price.
@@ -309,30 +356,16 @@ unnested_Gewürztraminer %>%
          x = "Descriptor Words")
 ```
 
-``` {r average_wine_score_clt, message = FALSE, warning = FALSE, echo = FALSE}
-t.test(wine_data$points,
-       mu = 90.93939,
-       alternative = "two.sided")
-```
-Here, we see that the overall mean of all wine scores is 88.88125 and has a 95% confidence interval or 88.82544 to 88.93706. This shows us that our observed average score of 90.93939 for Australia has statistical significance in its difference from the mean.
-
-
-
 ``` {r weighted_wine_scores_to_price, message = FALSE, warning = FALSE, echo = FALSE}
 weighted_avg <- wine_data %>%
     group_by(country)%>%
     summarize(country, winery, variety, price, country, points, weighted = points/price) %>%
         arrange(desc(weighted))
-```
-
-```{r weighted_wine_scores_to_price2, message = FALSE, warning = FALSE, echo = FALSE}
 
 weighted_avg
-# 
-# ggplot(data = wine_data, mapping = aes(x = price, y = points)) + geom_point() + geom_smooth(method = "lm", se = F) + facet_wrap(~top_3)
 
 weighted_avg <- relevant_countries %>% 
-    mutate(weighted = log((points/price), base = exp(1))) %>% 
+    mutate(weighted = log((price/points), base = exp(1))) %>% 
     mutate(top_3 = if_else(country == "Austria" |
                                country == "Germany" |
                                country == "France",
@@ -357,26 +390,6 @@ m_points = glm(price ~ points, data = weighted_avg)
 tidy(m_points)
 ```
 
-```{r, echo = FALSE}
-country_counts <- wine_data %>%
-    group_by(country) %>%
-    count(country) %>%
-    filter(n >= 100)
-
-country_counts
-
-
-top_countries <- wine_data %>% 
-  filter(country == "Austria" |
-           country == "Germany" |
-           country == "France" |
-           country == "US" |
-           country == "Italy")
-
-ggplot(data = top_countries, mapping = aes(points)) + 
-  geom_density() + 
-  facet_wrap(~country)
-```
 ```{r}
 
 wine_data_over_90 <- wine_data %>%
@@ -389,7 +402,7 @@ ggplot(data = wine_data_over_90, mapping = aes(x = price, y = points )) +
 
 lm
 ```
-
+### Results
 
 
 ### Discussion
