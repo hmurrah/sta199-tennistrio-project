@@ -1,6 +1,6 @@
 ---
-title: "Project Draft - Tennis Trio"
-subtitle: "Due Friday, October 9, 11:59 PM"
+title: "What Makes a Good Wine?"
+subtitle: "Due Friday, November 20, 11:59 PM"
 author: "Tennis Trio: Hamilton Murrah, Kellyn McDonald, Naima Turbes"
 output: pdf_document
 ---
@@ -8,14 +8,14 @@ output: pdf_document
 library(tidyverse)
 library(tidytext)
 wine_data <- read_csv("data/winemag-data_first150k.csv") 
+knitr::opts_chunk$set(warning = FALSE, message = FALSE, echo = FALSE)
 ```
 
 ### Introduction
 
-People have cultivated and appreciated wines for millennia. In fact, the oldest known winery was found in a cave outside of a village in Armenia and dates back to 4,100 BC. Since then, wine production and consumption spread throughout the globe and become a important part of many cultures. Today, wine is largely used as a celebratory drink during activities like weddings or holidays. Fine wines are often more expensive and associated with higher societal status or class (https://winefolly.com/deep-dive/where-did-wine-come-from/#:~:text=Ancient%20wine%20production%20evidence%20dates,grape%20domestication%20in%20eastern%20Turkey)
-.
+People have cultivated and appreciated wines for millennia. In fact, the oldest known winery was found in a cave outside of a village in Armenia and dates back to 4,100 BC. Since then, wine production and consumption spread throughout the globe and become a important part of many cultures. Today, wine is largely used as a celebratory drink during activities like weddings or holidays. Fine wines are often more expensive and associated with higher societal status or class[1].
 
-Most current wine production happens in Europe. In 2019, Italy produced 21.6 million hectoliters of wine and was the world's largest wine producer. The next two largest wine producers that year were Spain and France, producing 21.3 million hectoliters and 14.2 million hectoliters respectively. Nevertheless, a 2019 survey from Forbes found that the the best ranked wine was from Napa Valley in the United States (https://www.forbes.com/sites/eustaciahuen/2019/03/25/wine-3/#6b2719750ed0). We are curious to see if this has changed.
+Most current wine production happens in Europe. In 2019, Italy produced 21.6 million hectoliters of wine and was the world's largest wine producer. The next two largest wine producers that year were Spain and France, producing 21.3 million hectoliters and 14.2 million hectoliters respectively [2]. Nevertheless, a 2019 survey from Forbes found that the the best ranked wine was from Napa Valley in the United States [3]. We are curious to see if this has changed.
 
 We investigated wine ratings from wine enthusiasts around the globe using wine ranking data scraped from WineEnthusiast.com.
 
@@ -137,7 +137,7 @@ ggplot(data = top_countries, mapping = aes(points)) +
   facet_wrap(~country)
 ```
 
-The density plots of the point distribution are consistent with the mean point values calculated earlier. Austria has a very high density of wine scores 
+The density plots of the point distribution for the top five countries are consistent with the mean point values calculated earlier. Austria has a very high density of wine scores around 90 that likely contributes to the country's higher average wine point score. 
 
 ```{r, echo= FALSE}
 
@@ -153,7 +153,7 @@ ggplot(data = top_var, mapping = aes(points)) +
   facet_wrap(~variety)
 
 ```
-The density plots for the top five varieties display an interesting trend. Gewürztraminer, Pinot Gris, Pinot Noir, and Riesling varieties show more evenly distributed point values for wines whereas Grüner Veltliner's data distribution is concentrated around the 90 point value. Unlike with Austria, however, this larger density of wines around the 90 point value did not make the Grüner Veltliner the variety with the best average point value.
+The density plots for the point values for the top five varieties of wine display an interesting trend. Gewürztraminer, Pinot Gris, Pinot Noir, and Riesling varieties show more evenly distributed point values for wines whereas Grüner Veltliner's data distribution is concentrated around the 90 point value. Unlike with Austria, however, this larger density of wines around the 90 point value did not make the Grüner Veltliner the variety with the best average point value.
 
 ```{r}
 
@@ -192,7 +192,7 @@ We conducted the following tests below to evaluate our hypotheses.
 
 1. We created a linear model for the points a wine received that based on the price of a wine.
 
-We evaluated the data below to characterize how appropriate it isto create a linear model for the data.
+We evaluated the data below to characterize how appropriate it is to create a linear model for the data.
 
 ```{r}
 
@@ -275,7 +275,6 @@ We know that it is appropriate to use a CLT based test because the samples are i
 
 ### Results
 
-
 ``` {r, echo = FALSE}
 m_points = glm(points ~ price, data = wine_data)
 tidy(m_points)
@@ -295,14 +294,18 @@ lmthingy
 modell <- lm(points ~ top_countries + top_varieties, data = lmthingy)
 tidy(modell)
 
-
 ```
 
 predicted points = 88.13 + 0.66(topcountry) + 1.145(topvariety)
 
 This is a linear model that shows the predicted number of points for a particular wine given whether or not the wine is from a top country and whether or not the wine is from a top variety.
 
+88.13 is the predicted point value of a wine all other variables are 0. This means that if the wine was not in a top country and not in a top variety, this is the estimated point value.
 
+While holding all other variables constant, a wine from one of the five top countries is expected to have a predicted point value that is 0.66 points higher than a wine from any other country.
+
+
+While holding all other variables constant, a wine from one of the five top varieties is expected to have a predicted point value that is 1.145 points higher than a wine from any other variety
 
 
 ``` {r average_wine_score_clt, message = FALSE, warning = FALSE, echo = FALSE}
@@ -615,7 +618,7 @@ ggplot(data = austria, mapping = aes(x = price, y = weighted)) +
 
 points to bring up: austria is the best. more expensive wines are better up to a point (need to determine this point, use a linear model)
 
-  Our analyses showed that the highest rated wines are from Austria, there is a positive relationship between price and point ratings, and also displayed some small differences words used to describe highly rated and poorly rated wines.  
+  Our analyses showed that the highest rated wines are from Austria, a positive relationship between price and point ratings, and also some small differences words used to describe highly rated and poorly rated wines.  
 
   This investigation gave specific evidence against our hypothesis that Italy and France would be the countries with the highest rated wines. Instead, both Austria and Germany had on average higher point ratings for their wines than these two countries. This information was especially surprising considering Italy and Spain were the top wine producers in 2019 and Forbes rated Napa Valley as the source of the best ranked wine in the same year. Because only "wine experts" gave data for the data set used in this investigation, we think that the point system more closely resembles a niche set of wine connoisseurs than the general public. This might be a reason for these differences. 
   
@@ -642,3 +645,13 @@ points to bring up: austria is the best. more expensive wines are better up to a
 
 
 ### References
+
+[1] “Where Did Wine Come From? The True Origin of Wine.” Wine Folly, 19 Oct. 2020, winefolly.com/deep-dive/where-did-wine-come-from/. 
+
+[2] Conway, Published by Jan, and May 13. “Leading Countries in Global Wine Production, 2019.” Statista, 13 May 2020, www.statista.com/statistics/240638/wine-production-in-selected-countries-and-regions/. 
+
+[3] Huen, Eustacia. “The World's 30 Best Wines In 2019.” Forbes, Forbes Magazine, 26 Mar. 2019, www.forbes.com/sites/eustaciahuen/2019/03/25/wine-3/. 
+
+
+
+
