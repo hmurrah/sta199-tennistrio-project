@@ -4,7 +4,7 @@ subtitle: "Due Friday, November 20, 11:59 PM"
 author: "Tennis Trio: Hamilton Murrah, Kellyn McDonald, Naima Turbes"
 output: pdf_document
 ---
-```{r packages-data, warning=FALSE, message=FALSE}
+```{r packages-data, warning=FALSE, message=FALSE, echo = FALSE}
 library(tidyverse)
 library(tidytext)
 wine_data <- read_csv("data/winemag-data_first150k.csv") 
