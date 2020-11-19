@@ -1,4 +1,4 @@
-# Wine Selection
+# What Makes a Good Wine?
 
 This project aims to analyze wine rankings in order to explore how to pick the best wines. User zackthoutt on Kaggle collected this data by scraping data from WineEnthusiast.com.
 
