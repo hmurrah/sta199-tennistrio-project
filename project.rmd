@@ -624,14 +624,13 @@ points to bring up: austria is the best. more expensive wines are better up to a
   
   Moreover, we recognize that this list of top 5 countries may not be an accurate representation of where the best wines come from, but rather a representation of what location on average has the wines with the highest point ratings. This calculation rewards countries with one highly rated wine and disadvantages countries that have wines represented in the data set with very high point values and more very poorly rated wines.
   
-  The density plots for price and points further evidence Austria as a source of better wine. Austria clearly has a larger proportion of higher rated wines than the other top 5 countries yet at similar price ranges.
+  The density plots for price and points further evidence Austria as a source of better wine. Austria clearly has a larger proportion of higher rated wines than the other top 5 countries yet at similar price ranges. Also, the wines for the top countries all show similar price distributions. Because of less variation between price in these top countries, we can make a stronger conclusion that these differences in point values represent differences percieved wine quality in among similar wines.
   
 ** write portion here about top varieties, note that the top varieties are from the top countries
 
   
-  
-  In addition to the calculation of the top countries and varieties, the linear models for predicted price both give evidence for a positive strong relationship between price and points. For example, in the glm for points given price, we calculated a p value of 1.05e-289 for the price factor. Additionally, the linear model with top countries and top variety factors gave p values of 5.56e-21 and 1.63e-56, respectively. At an alpha level of 0.05, this gives strong evidence against a null hypothesis that there is no relationship between being in the top variety or country and the point value.
-  This means that when choosing a wine to maximize points awarded by wine connesuirs, it makes the most sense to choose a wine from one of these top countries and varieties. 
+  In addition to the calculation of the top countries and varieties, the linear models for predicted price both give evidence for a positive strong relationship between price and points. The linear model with top countries and top variety factors gave p values of 5.56e-21 and 1.63e-56, respectively. At an alpha level of 0.05, this gives strong evidence against a null hypothesis which is that there is no relationship between being in the top variety or country and the point value.
+  This means that when choosing a wine to maximize points awarded by wine connoisseurs, it makes the most sense to choose a wine from one of these top countries and varieties. 
   
 
 
