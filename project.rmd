@@ -79,10 +79,12 @@ weighted_avg_test <- wine_data %>%
 
 
 ```
+
 Contrary to our hypothesis, Italy and France were not the top two countries. Both Austria and Germany had on average higher point ratings for their wines than these two countries. The top 5 countries with the highest average wine score are Austria, Germany, France, US, and Italy in that order. 
 
-Varieties with Highest Average Wine Point Score
-```{r highest_and_lowest_average_points_by_variety, warning = F, message = F, echo= FALSE}
+Varieties with the Highest Average Wine Point Score
+
+```{r highest_average_points_by_variety, warning = F, message = F, echo= FALSE}
 variety_means <- wine_data %>% 
     group_by(variety) %>% 
     summarize(mean = mean(points)) %>% 
@@ -102,7 +104,13 @@ variety_means_more_than_50 <- wine_data %>%
     filter(variety %in% variety_counts$variety) %>%
     top_n(5)
 variety_means_more_than_50
+```
 
+We calculated the top 5 best rated varieties of wine similarly. Our first calculation returned Cabernet-Shiraz, Cabernet Sauvignon-Shiraz, Blauburgunder, Friulano, and Carignan as the top rated wine varieties. However, after observing the data, we noticed that these wine varieties had a relatively small number of wines represented in the entire data set. To try to better represent the varieties of wines with consistently top rated products, we filtered to only include wine varieties with at least 50 wines ratings represented in the data set. The top varieties presented in this calculation were Gewürztraminer, Grüner Veltliner, Pinot Gris, Pinot Noir, and Riesling. 
+
+Varieties with the Lowest Average Wine Point Score
+
+``` {r lowest_average_points_by_variety, message = F, warning = F, echo = F}
 variety_means_more_than_50_bottom_5 <- wine_data %>%
     group_by(variety) %>% 
     summarize(mean = mean(points)) %>% 
@@ -112,7 +120,7 @@ variety_means_more_than_50_bottom_5 <- wine_data %>%
 variety_means_more_than_50_bottom_5
 ```
 
-We calculated the top 5 best rated varieties of wine similarly. Our first calculation returned Cabernet-Shiraz, Cabernet Sauvignon-Shiraz, Blauburgunder, Friulano, and Carignan as the top rated wine varieties. However, after observing the data, we noticed that these wine varieties had a relatively small number of wines represented in the entire data set. To try to better represent the varieties of wines with consistently top rated products, we filtered to only include wine varieties with at least 50 wines ratings represented in the data set. The top varieties presented in this calculation were Gewürztraminer, Grüner Veltliner, Pinot Gris, Pinot Noir, and Riesling. 
+We followed this same methodology in order to calculate the bottom 5 rated varieties. We again filtered the data to only consider varieties with 50 or more samples in the data set. The bottom 5 varieties from this calculation were Portuguese White, Merlot, Malbec, White Blend, and Viognier.
 
 We then created density plots for the point distribution for the top 5 varieties and top 5 countries. 
 
@@ -121,9 +129,6 @@ country_counts <- wine_data %>%
     group_by(country) %>%
     count(country) %>%
     filter(n >= 100)
-
-country_counts
-
 
 top_countries <- wine_data %>% 
   filter(country == "Austria" |
@@ -152,7 +157,7 @@ top_var <- wine_data %>%
 ggplot(data = top_var, mapping = aes(points)) + 
   geom_density() + 
   facet_wrap(~variety) +
-  labs(x = "Points", y = "Density", title = "Grüner Veltiner has a relatively concentrated density between 85 and 90 points")
+  labs(x = "Points", y = "Density", title = "Grüner Veltiner has a concentrated density between 85 and 90 points")
 
 ```
 The density plots for the point values for the top five varieties of wine display an interesting trend. Gewürztraminer, Pinot Gris, Pinot Noir, and Riesling varieties show more evenly distributed point values for wines whereas Grüner Veltliner's data distribution is concentrated around the 90 point value. Unlike with Austria, however, this larger density of wines around the 90 point value did not make the Grüner Veltliner the variety with the best average point value.
@@ -205,6 +210,7 @@ m_int %>%
   select(term, estimate)
 
 ```
+
 ```{r}
 
 lmthingy <- wine_data %>%
@@ -290,8 +296,6 @@ For every dollar increase in price, holding all other variables constant, we can
 lmthingy <- wine_data %>%
   mutate (top_countries = ifelse(country == "Austria" | country == "France"| country == "US" | country == "Italy" | country == "Germany", 1, 0)) %>%
   mutate (top_varieties = ifelse(variety == "Gewürztraminer" | variety == "Grüner Veltliner"| variety == "Pinot Gris" | variety == "Pinot Noir" | variety == "Riesling", 1, 0))
-
-lmthingy
  
 modell <- lm(points ~ top_countries + top_varieties, data = lmthingy)
 tidy(modell)
@@ -625,16 +629,12 @@ weighted_avg <- wine_data %>%
     summarize(country, winery, variety, price, country, points, weighted = points/price) %>%
         arrange(desc(weighted))
 
-weighted_avg
-
 weighted_avg <- relevant_countries %>% 
     mutate(weighted = log((price/points), base = exp(1))) %>% 
     mutate(top_3 = if_else(country == "Austria" |
                                country == "Germany" |
                                country == "France",
                            country, "Other"))
-
-weighted_avg
 
 ggplot(data = weighted_avg, mapping = aes(x = price, y = weighted)) + 
     geom_point() + 
@@ -699,5 +699,7 @@ Text Analysis
 [3] Huen, Eustacia. “The World's 30 Best Wines In 2019.” Forbes, Forbes Magazine, 26 Mar. 2019, www.forbes.com/sites/eustaciahuen/2019/03/25/wine-3/. 
 
 
+**Add appendix of words we removed in text analysis**
 
+**Maybe make the sections (results, methodology, etc.) be the big section titles and bold the sentences above the graphs and tables saying what we're doing?**
 
