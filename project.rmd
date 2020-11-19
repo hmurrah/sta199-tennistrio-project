@@ -39,14 +39,12 @@ A description of the columns of our data set are as follows
 - `variety`: The type of grapes used to make the wine (ie Pinot Noir)
 - `winery`: The winery that made the wine
 
-
 ### Glimpse of data
 
 ```{r, echo = FALSE}
 glimpse(wine_data)
 ```
 ### Methodology
- 
  
 We first calculated on average which countries have the highest rated wines by finding the mean scores of each country and summarizing the data into a table. We did the same calculation for top varieties of wine.
 
@@ -82,7 +80,6 @@ weighted_avg_test <- wine_data %>%
 
 ```
 Contrary to our hypothesis, Italy and France were not the top two countries. Both Austria and Germany had on average higher point ratings for their wines than these two countries. The top 5 countries with the highest average wine score are Austria, Germany, France, US, and Italy in that order. 
-
 
 Varieties with Highest Average Wine Point Score
 ```{r highest_and_lowest_average_points_by_variety, warning = F, message = F, echo= FALSE}
@@ -140,6 +137,8 @@ ggplot(data = top_countries, mapping = aes(points)) +
   facet_wrap(~country)
 ```
 
+The density plots of the point distribution are consistent with the mean point values calculated earlier. Austria has a very high density of wine scores 
+
 ```{r, echo= FALSE}
 
 top_var <- wine_data %>% 
@@ -154,7 +153,7 @@ ggplot(data = top_var, mapping = aes(points)) +
   facet_wrap(~variety)
 
 ```
-
+The density plots for the top five varieties display an interesting trend. Gewürztraminer, Pinot Gris, Pinot Noir, and Riesling varieties show more evenly distributed point values for wines whereas Grüner Veltliner's data distribution is concentrated around the 90 point value. Unlike with Austria, however, this larger density of wines around the 90 point value did not make the Grüner Veltliner the variety with the best average point value.
 
 ```{r}
 
@@ -187,36 +186,103 @@ ggplot(data = top_var, mapping = aes(price)) +
 
 ```
 
-
-***write something about density plots here
+The density plots for the top five varieties and top five countries all look similar. The data is left skewed and most of the wines are less than 100 dollars. 
  
 We conducted the following tests below to evaluate our hypotheses.
 
 1. We created a linear model for the points a wine received that based on the price of a wine.
 
+We evaluated the data below to characterize how appropriate it isto create a linear model for the data.
+
+```{r}
+
+m_int <- lm(points ~ price, 
+            data = wine_data) 
+m_int %>%
+  tidy() %>%
+  select(term, estimate)
+
+```
+```{r}
+
+lmthingy <- wine_data %>%
+  mutate (top_countries = ifelse(country == "Austria" | country == "France"| country == "US" | country == "Italy" | country == "Germany", 1, 0)) %>%
+  mutate (top_varieties = ifelse(variety == "Gewürztraminer" | variety == "Grüner Veltliner"| variety == "Pinot Gris" | variety == "Pinot Noir" | variety == "Riesling", 1, 0))
+
+ 
+modell <- lm(points ~ top_countries + top_varieties, data = lmthingy)
+tidy(modell)
+
+m_int_aug <- augment(modell)
+
+ggplot(m_int_aug, mapping = aes(x = .fitted, y = .resid)) +
+  geom_point() + 
+  geom_hline(yintercept = 0, lwd = 2, col = "red", lty = 2) +
+  labs(x = "Predicted Points", y = "Residuals")
+
+ggplot(m_int_aug, mapping = aes(x = .resid)) +
+  geom_histogram(bins = 15) + 
+  labs(x = "Residuals")
+
+
+ggplot(m_int_aug, mapping = aes(sample = .resid)) +
+  stat_qq() + 
+  stat_qq_line()
+
+```
+We can assume independence for this data due to way that the data was randomly collected. We have symmetrically distributed data around the y=0 line to support linearity. We also have equal variance because there is a each vertical slice in the graph has a similar spread of data.
+
+We do not have data tosupport normality as seen where the right portion of the final graph does not follow the line for normally distributed data. 
+
 2. We created another linear model to predict the number of points that a wine would receive depending on whether or not it was made in a top country or not and whether it was a top variety or not.
 
-** need to state conditions for linear regression
+We evaluated the data below to characterize how appropriate it isto create a linear model for the data.
 
+```{r}
+
+m_points <- glm(points ~ price, data = wine_data)
+tidy(m_points)
+
+m_int_aug2 <- augment(m_points)
+
+ggplot(m_int_aug2, mapping = aes(x = .fitted, y = .resid)) +
+  geom_point() + 
+  geom_hline(yintercept = 0, lwd = 2, col = "red", lty = 2) +
+  labs(x = "Predicted Points", y = "Residuals")
+
+ggplot(m_int_aug2, mapping = aes(x = .resid)) +
+  geom_histogram(bins = 15) + 
+  labs(x = "Residuals")
+
+
+ggplot(m_int_aug2, mapping = aes(sample = .resid)) +
+  stat_qq() + 
+  stat_qq_line()
+
+```
+
+We can assume independence for this data due to way that the data was randomly collected. We have equal variance because there is a each vertical slice in the graph has a similar spread of data. 
+
+Nevertheless, we do not have symmetrically distributed data around the y=0 line to support linearity. Additionally, we do not have evidence to support normality as seen where the left portion of the final graph does not follow the line for normally distributed data. 
 
 3. We used a CLT based t test to determine whether there is a statistically significant difference between the highest rated country's average score and the average wine score for all countries.
 
 We know that it is appropriate to use a CLT based test because the samples are independent of each other (taken randomly) due to the way that the data was collected. Moreover, n>30 in this sampling.
 
-
 4. We used text analysis on the description variable to pick out key word descriptors in order to determine if there is there a relationship between the descriptor and the score. We visualized this relationship.
 
 5. We calculated a weighted score for wines considering the number of points received and expense of the wine. We created a transformed linear model to observe this relationship on a graph.
-
 
 ### Results
 
 
 ``` {r, echo = FALSE}
-m_points = glm(price ~ points, data = wine_data)
+m_points = glm(points ~ price, data = wine_data)
 tidy(m_points)
 ```
+predicted points = -440.214 + 5.351(price)
 
+For every dollar increase in price, holding all other variables constant, we can expect that there will be a 0.03211381 increase in points.
 
 ```{r, echo = FALSE}
 
@@ -237,20 +303,21 @@ predicted points = 88.13 + 0.66(topcountry) + 1.145(topvariety)
 This is a linear model that shows the predicted number of points for a particular wine given whether or not the wine is from a top country and whether or not the wine is from a top variety.
 
 
+
+
 ``` {r average_wine_score_clt, message = FALSE, warning = FALSE, echo = FALSE}
 t.test(wine_data$points,
        mu = 90.93939,
        alternative = "two.sided")
 ```
 
-$H_0$ =  
-$H_1$ = 
+$H_0$ =  the true mean of the points is equal to 90.939
+$H_1$ = the true mean of the points is NOT equal to 90.939
 $\alpha$ = 0.05
 p value: 2.2e-16
 decision: reject the null hypothesis
 
 Here, we see that the overall mean of all wine scores is 88.88125 and has a 95% confidence interval or 88.82544 to 88.93706. This shows us that our observed average score of 90.79 for the top rated wine country (Austria) has statistical significance in its difference from the mean.
-
 
 ``` {r sentiment_analysis_top_5_varieties, message = F, warning = F, echo = FALSE}
 Gewürztraminer <- wine_data %>%
@@ -557,6 +624,8 @@ points to bring up: austria is the best. more expensive wines are better up to a
   The density plots for price and points further evidence Austria as a source of better wine. Austria clearly has a larger proportion of higher rated wines than the other top 5 countries yet at similar price ranges.
   
 ** write portion here about top varieties, note that the top varieties are from the top countries
+
+  
   
   In addition to the calculation of the top countries and varieties, the linear models for predicted price both give evidence for a positive strong relationship between price and points. For example, in the glm for points given price, we calculated a p value of 1.05e-289 for the price factor. Additionally, the linear model with top countries and top variety factors gave p values of 5.56e-21 and 1.63e-56, respectively. At an alpha level of 0.05, this gives strong evidence against a null hypothesis that there is no relationship between being in the top variety or country and the point value.
   This means that when choosing a wine to maximize points awarded by wine connesuirs, it makes the most sense to choose a wine from one of these top countries and varieties. 
