@@ -134,7 +134,8 @@ top_countries <- wine_data %>%
 
 ggplot(data = top_countries, mapping = aes(points)) + 
   geom_density() + 
-  facet_wrap(~country)
+  facet_wrap(~country) +
+  labs(x = "Points", y = "Density", title = "Austria has the highest density of wines that scored 90 or above")
 ```
 
 The density plots of the point distribution for the top five countries are consistent with the mean point values calculated earlier. Austria has a very high density of wine scores around 90 that likely contributes to the country's higher average wine point score. 
@@ -150,7 +151,8 @@ top_var <- wine_data %>%
 
 ggplot(data = top_var, mapping = aes(points)) + 
   geom_density() + 
-  facet_wrap(~variety)
+  facet_wrap(~variety) +
+  labs(x = "Points", y = "Density", title = "Grüner Veltiner has a relatively concentrated density between 85 and 90 points")
 
 ```
 The density plots for the point values for the top five varieties of wine display an interesting trend. Gewürztraminer, Pinot Gris, Pinot Noir, and Riesling varieties show more evenly distributed point values for wines whereas Grüner Veltliner's data distribution is concentrated around the 90 point value. Unlike with Austria, however, this larger density of wines around the 90 point value did not make the Grüner Veltliner the variety with the best average point value.
