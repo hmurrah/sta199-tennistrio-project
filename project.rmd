@@ -13,7 +13,7 @@ knitr::opts_chunk$set(warning = FALSE, message = FALSE, echo = FALSE)
 
 ### Introduction
 
-People have cultivated and appreciated wines for millennia. In fact, the oldest known winery was found in a cave outside of a village in Armenia and dates back to 4,100 BC. Since then, wine production and consumption spread throughout the globe and become a important part of many cultures. Today, wine is largely used as a celebratory drink during activities like weddings or holidays. Fine wines are often more expensive and associated with higher societal status or class[1].
+People have cultivated and appreciated wines for millennia. In fact, the oldest known winery was found in a cave outside of a village in Armenia and dates back to 4,100 BC. Since then, wine production and consumption has spread throughout the globe and become a important part of many cultures. Today, wine is largely used as a celebratory drink during activities like weddings or holidays. Fine wines are often more expensive and associated with higher societal status or class[1].
 
 Most current wine production happens in Europe. In 2019, Italy produced 21.6 million hectoliters of wine and was the world's largest wine producer. The next two largest wine producers that year were Spain and France, producing 21.3 million hectoliters and 14.2 million hectoliters respectively [2]. Nevertheless, a 2019 survey from Forbes found that the the best ranked wine was from Napa Valley in the United States [3]. We are curious to see if this has changed.
 
@@ -106,7 +106,7 @@ variety_means_more_than_50 <- wine_data %>%
 variety_means_more_than_50
 ```
 
-We calculated the top 5 best rated varieties of wine similarly. Our first calculation returned Cabernet-Shiraz, Cabernet Sauvignon-Shiraz, Blauburgunder, Friulano, and Carignan as the top rated wine varieties. However, after observing the data, we noticed that these wine varieties had a relatively small number of wines represented in the entire data set. To try to better represent the varieties of wines with consistently top rated products, we filtered to only include wine varieties with at least 50 wines ratings represented in the data set. The top varieties presented in this calculation were Gewürztraminer, Grüner Veltliner, Pinot Gris, Pinot Noir, and Riesling. 
+We calculated the top 5 best rated varieties of wine similarly. Our first calculation returned Cabernet-Shiraz, Cabernet Sauvignon-Shiraz, Blauburgunder, Friulano, and Carignan as the top rated wine varieties. However, after observing the data, we noticed that these wine varieties had a relatively small number of wines represented in the entire data set. To try to better represent the varieties of wines with consistently top rated products, we filtered to only include wine varieties with at least 50 wine ratings represented in the data set. The top varieties presented in this calculation were Gewürztraminer, Grüner Veltliner, Pinot Gris, Pinot Noir, and Riesling. 
 
 Varieties with the Lowest Average Wine Point Score
 
@@ -160,6 +160,7 @@ ggplot(data = top_var, mapping = aes(points)) +
   labs(x = "Points", y = "Density", title = "Grüner Veltiner has a concentrated density between 85 and 90 points")
 
 ```
+
 The density plots for the point values for the top five varieties of wine display an interesting trend. Gewürztraminer, Pinot Gris, Pinot Noir, and Riesling varieties show more evenly distributed point values for wines whereas Grüner Veltliner's data distribution is concentrated around the 90 point value. Unlike with Austria, however, this larger density of wines around the 90 point value did not make the Grüner Veltliner the variety with the best average point value.
 
 ```{r price_countries_density, message = F, warning = F, echo = F}
@@ -195,11 +196,11 @@ ggplot(data = top_var, mapping = aes(price)) +
 
 ```
 
-The density plots for the top five varieties and top five countries all look generally similar. The data is left skewed and most of the wines are less than 100 dollars. One noticable difference is that the Gruner Veltliner variety and Austria have cheaper wines compared to the other top varieties or countries.
+The density plots for the top five varieties and top five countries all look generally similar. The data is left skewed and most of the wines are less than 100 dollars. One noticeable difference is that the Gruner Veltliner variety and Austria have cheaper wines compared to the other top varieties or countries.
  
 We conducted the following tests below to evaluate our hypotheses.
 
-1. We created a linear model for the points a wine received that based on the price of a wine.
+1. We created a linear model for the predicted points a wine received based on the price of a wine.
 
 We evaluated the data below to characterize how appropriate it is to create a linear model for the data.
 
@@ -240,11 +241,11 @@ ggplot(m_int_aug, mapping = aes(sample = .resid)) +
   stat_qq_line()+ labs(title = "Non Normal Distribution for Top Countries and Varieties Model")
 
 ```
-We can assume independence for this data due to way that the data was randomly collected. We have symmetrically distributed data around the y=0 line to support linearity. We also have equal variance because there is a each vertical slice in the graph has a similar spread of data.
+We can assume independence for this data due to the way that the data was randomly collected. We have symmetrically distributed data around the y=0 line to support linearity. We also have equal variance because each vertical slice in the graph has a similar spread of data.
 
 We do not have data to support normality as seen where the right portion of the final graph does not follow the line for normally distributed data. 
 
-2. We created another linear model to predict the number of points that a wine would receive depending on whether or not it was made in a top country or not and whether it was a top variety or not.
+2. We created another linear model to predict the number of points that a wine would receive depending on whether or not it was made in a top country and whether it was a top variety or not.
 
 We evaluated the data below to characterize how appropriate it is to create a linear model for the data.
 
@@ -271,7 +272,7 @@ ggplot(m_int_aug2, mapping = aes(sample = .resid)) +
 
 ```
 
-We can assume independence for this data due to way that the data was randomly collected. We have equal variance because there is a each vertical slice in the graph has a similar spread of data. 
+We can assume independence for this data due to the way that the data was randomly collected. We have equal variance because there is a each vertical slice in the graph has a similar spread of data. 
 
 Nevertheless, we do not have symmetrically distributed data around the y=0 line to support linearity. Additionally, we do not have evidence to support normality as seen where the left portion of the final graph does not follow the line for normally distributed data. 
 
@@ -308,10 +309,9 @@ predicted points = 88.13 + 0.66(topcountry) + 1.145(topvariety)
 
 This is a linear model that shows the predicted number of points for a particular wine given whether or not the wine is from a top country and whether or not the wine is from a top variety.
 
-88.13 is the predicted point value of a wine all other variables are 0. This means that if the wine was not in a top country and not in a top variety, this is the estimated point value.
+88.13 is the predicted point value of a wine assuming all other variables are 0. This means that if the wine was not in a top country and not in a top variety, this is the estimated point value.
 
 While holding all other variables constant, a wine from one of the five top countries is expected to have a predicted point value that is 0.66 points higher than a wine from any other country.
-
 
 While holding all other variables constant, a wine from one of the five top varieties is expected to have a predicted point value that is 1.145 points higher than a wine from any other variety
 
@@ -618,7 +618,7 @@ ggplot(data = cheap_wine_word_counts, aes(fct_reorder(word, prob), prob)) +
          y = "Frequency")
 ```
 
-Here we are separating the wines by expensive (>= $200) and cheap (<= $10). Again, we see some immediate similarities between the two. For example, we see tannins, red, black, ripe, and berry falling at different positions for each throughout the graph. There doesn't seem to be any similarities as to where they appear in the lists (i.e. appears in the top 3 for both), but it is interesting to note that they are present in both. Acidity makes sense as to why it appears as it is present in all wines, although it is interesting that it is the most common descriptor for cheaper wines by a fair margin. Another thing to note is that both categories have the word red fairly often (presumably referencing red wine) and we know from our top wine varieties that red wine tends to be rated more highly. We expected the cheap wines to reference white more often, however this was not the case.
+Here we are separating the wines by expensive (>= $200) and cheap (<= $10). Again, we see some immediate similarities between the two. For example, we see tannins, red, black, ripe, and berry falling at different positions for each throughout the graph. There don't seem to be any similarities as to where they appear in the lists (i.e. appears in the top 3 for both), but it is interesting to note that they are present in both. Acidity makes sense as to why it appears as it is present in all wines, although it is interesting that it is the most common descriptor for cheaper wines by a fair margin. Another thing to note is that both categories have the word red fairly often (presumably referencing red wine) and we know from our top wine varieties that red wine tends to be rated more highly. We expected the cheap wines to reference white more often, however this was not the case.
 
 On the expensive side, we see the words oak, aging, and berry. Perhaps it is the case that these expensive wines are more likely to be stored and aged in higher quality barrels (oak may be the preferred substance) than cheaper ones. The presence of aging makes sense since there tends to be a correlation between older wines and higher prices. Berry is intriguing though. Recall that berry was one of the descriptors present in the bottom 5 wines from above. We find it very interesting that there is this correlation between expensive wines and lowly rated wines. Additionally, both black and ripe appear in the same places in the expensive chart as they do in the bottom 5 wine chart. While both of these words are also present in the cheaper wine charts, this is expected as we hypothesized that cheaper wines would correlate higher with lower rated wines. This leads us to the conclusion that more expensive wines do not necessarily imply higher scoring wines. There may even be correlations to the contrary. 
 
@@ -667,15 +667,15 @@ ggplot(data = austria, mapping = aes(x = price, y = weighted)) +
 ### Discussion
 
 
-  Our analyses showed that the highest rated wines are from Austria, a positive relationship between price and point ratings, and also some small differences words used to describe highly rated and poorly rated wines.
+  Our analyses showed that the highest rated wines are from Austria, a positive relationship between price and point ratings, and also some small differences in the words used to describe highly rated and poorly rated wines.
 
   
 Top Countries and Varieties
   
   This investigation gave specific evidence against our hypothesis that Italy and France would be the countries with the highest rated wines. Instead, both Austria and Germany had on average higher point ratings for their wines than these two countries. This information was especially surprising considering Italy and Spain were the top wine producers in 2019 and Forbes rated Napa Valley as the source of the best ranked wine in the same year. Because only "wine experts" gave data for the data set used in this investigation, we think that the point system more closely resembles a niche set of wine connoisseurs than the general public. This might be a reason for these differences. 
   Moreover, we recognize that this list of top 5 countries may not be an accurate representation of where the best wines come from, but rather a representation of what location on average has the wines with the highest point ratings. This calculation rewards countries with one highly rated wine and disadvantages countries that have wines represented in the data set with very high point values and more very poorly rated wines.
-  The density plots for price and points further evidence Austria as a source of better wine. Austria clearly has a larger proportion of higher rated wines than the other top 5 countries yet at similar price ranges. Also, Austria's wines were generally cheaper than the other countries as seen by the price density distribution graph.
-  We added in an analysis of varieties when we were exploring the data set. The density plots for top varieties showed that the Gewürztraminer wine variety had a more evenly distributed range of wines scores and prices, but a higher wine score on average. This might mean that while choosing a Gewürztraminer could give you a very higher rated wine, you could also have a lower rated wine. Whereas the less evenly distributed Grüner Veltliner variety primarily has wines with scores of at least 90.
+  The density plots for price and points further convey Austria as a source of better wine. Austria clearly has a larger proportion of higher rated wines than the other top 5 countries yet at similar price ranges. Also, Austria's wines were generally cheaper than the other countries as seen by the price density distribution graph.
+  We added in an analysis of varieties when we were exploring the data set. The density plots for top varieties showed that the Gewürztraminer wine variety had a more evenly distributed range of wines scores and prices, but a higher wine score on average. This might mean that while choosing a Gewürztraminer could give you a very highly rated wine, you could also have a lower rated wine. Whereas the less evenly distributed Grüner Veltliner variety primarily has wines with scores of at least 90.
   
 Relationship Between Price and Points  
 
@@ -683,13 +683,13 @@ Relationship Between Price and Points
   The linear model that predicted the number of points a wine would receive with a price factor had a p value of 3.77e-311 for the price factor. At an alpha level of 0.05, this gives strong evidence against a null hypothesis that there is no relationship between price and points.
   The linear model with top countries and top variety factors gave p values of 5.56e-21 and 1.63e-56, respectively. At an alpha level of 0.05, this gives strong evidence against a null hypothesis which is that there is no relationship between being in the top variety or country and the point value.
   This means that when choosing a wine to maximize points awarded by wine connoisseurs, it makes the most sense to choose a wine from one of these top countries and varieties. 
-  It should be noted that the data the first linear model showed it was not normally distributed and did not have linearity. The data for the second linear model was not normally distributed. This makes analysis using a linear model less effective.
-  Our weighted model graphically depicts the trend that as price goes up, so does price. We used a log transformation on the graph because the data was very right skewed and this transformation best displayed the relationship between the weighted variable and the price in a linear fashion. Although Austria has a relatively low sample size, the line fitted to Austria's wine data has the steepest slope which is consistent with the conclusion that Austria has the best wine for its price. 
+  It should be noted that in the data the first linear model showed was not normally distributed and did not have linearity. The data for the second linear model was not normally distributed. This makes analysis using a linear model less effective.
+  Our weighted model graphically depicts the trend that as points goes up, so does price. We used a log transformation on the graph because the data was very right skewed and this transformation best displayed the relationship between the weighted variable and the price in a linear fashion. Although Austria has a relatively low sample size, the line fitted to Austria's wine data has the steepest slope which is consistent with the conclusion that Austria has the best wine for its price. 
 
 Text Analysis
   
-  In our analysis of the text description, we found that We see that tannins and lemon both fall near the bottom of the graph for both groups, but that the words acidity and ripe fall in the top 4 for both graphs as well. We hypothesize this is the case because these are things that are present in most wines, regardless of score. Lemon is a bit of an outlier in the sense that it is not a flavor that is commonly thought of when considering wines. This could be indicative that our sample size may not be as representative as we initially believed. 
-  Where we begin to see differences however, are right at the top of the graphs. We see that the word cherry is very commonly used in the descriptions of the top 5 wines (nearly 1.5% of all words used was the cherry!). We also see dry and red rounding out the top 5. On the other graph, we notice that black, plum, and white are very common descriptors as well as apple and berry rounding out their top 10. 
+  In our analysis of the text description, we found that we see that tannins and lemon both fall near the bottom of the graph for both groups, but that the words acidity and ripe fall in the top 4 for both graphs as well. We hypothesize this is the case because these are things that are present in most wines, regardless of score. Lemon is a bit of an outlier in the sense that it is not a flavor that is commonly thought of when considering wines. This could be indicative that our sample size may not be as representative as we initially believed. 
+  Where we begin to see differences however, are right at the top of the graphs. We see that the word cherry is very commonly used in the descriptions of the top 5 wines (nearly 1.5% of all words used was  cherry!). We also see dry and red rounding out the top 5. On the other graph, we notice that black, plum, and white are very common descriptors as well as apple and berry rounding out their top 10. 
   From this, we can hypothesize that a highly rated wine is more likely to be a dry red with hints of cherry. While a lowly rated wine is likely to be a fruity white wine, or potentially a very dark red (where we imagine the black descriptor comes from) again with fruity hints outside of cherries.
   When comparing words used to describe cheap wines and expensive wines, we found that words used to describe expensive wines were also also found in poorly rated wines. On the other hand, words used to describe cheap wines were also found in highly rated wines. This indicates to us that when selecting a wine, you should still consider price, but price is not the only factor that determines good wines. You should also take into account country, variety, and previous wine ratings.
   In order to test these hypotheses in a future analysis we could count these words and perform a CLT based test to determine if the differences in probabilities of words in the top 5 wines or worst 5 wines are statistically different.
@@ -706,6 +706,6 @@ Text Analysis
 
 ### Appendix
 
-In working on our text and sentiment analysis, we quickly realized that we had to do some filtering beyond just a standard stop word anti join. To do this, we would run our code to retrieve the top 20 most common words that appeared in the descriptions for our different categories, and then analyze them to see if they all made sense. After repeating this many times, we felt that we had a representative sample of descriptors that were significant. Some of them were removed based off of the specific filter. For example, if we were filtering for Pinot Noirs, we didn't need to see the word Pinot in our top 20 descriptors. Additionally, we chose words like generous that didn't seem to tell us much and other words like wine and flavors that can reasonably be expected to be present in every description. There was a certainly a bit of arbitrary choice involved here but we felt all of the words taken out were not relevant to the comparisons we were making. Below you will find a list of the words we removed. 
+In working on our text and sentiment analysis, we quickly realized that we had to do some filtering beyond just a standard stop word anti join. To do this, we would run our code to retrieve the top 20 most common words that appeared in the descriptions for our different categories, and then analyze them to see if they all made sense. After repeating this many times, we felt that we had a representative sample of descriptors that were significant. Some of them were removed based off of the specific filter. For example, if we were filtering for Pinot Noirs, we didn't need to see the word Pinot in our top 20 descriptors. Additionally, we chose words like generous that didn't seem to tell us much and other words like wine and flavors that can reasonably be expected to be present in every description. There was a certainly a bit of arbitrary choice involved here, but we felt all of the words taken out were not relevant to the comparisons we were making. Below you will find a list of the words we removed. 
 
 wine, flavors, palate, drink, aromas, offers, finish, notes, long, generous, hints, nose, fresh, fruit, full, character, ready, 100,  merlot, texture, end, medium, bodied, malbec, portuguese, chardonnay, blanc, viognier, note, show, vineyard, style, shows, make, pinot, sauvignon, body, bottling, alongside, dense, dried, concentrated, years, vineyard, structure, age, fruits
