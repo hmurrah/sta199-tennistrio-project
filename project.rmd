@@ -226,16 +226,16 @@ m_int_aug <- augment(modell)
 ggplot(m_int_aug, mapping = aes(x = .fitted, y = .resid)) +
   geom_point() + 
   geom_hline(yintercept = 0, lwd = 2, col = "red", lty = 2) +
-  labs(x = "Predicted Points", y = "Residuals")
+  labs(x = "Predicted Points", y = "Residuals") +   labs(title = "Independence and Linearity for Top Countries and Varieties Model")
 
 ggplot(m_int_aug, mapping = aes(x = .resid)) +
   geom_histogram(bins = 15) + 
-  labs(x = "Residuals")
+  labs(x = "Residuals") + labs(title = "Non Normal Distribution for Top Countries and Varieties Model")
 
 
 ggplot(m_int_aug, mapping = aes(sample = .resid)) +
   stat_qq() + 
-  stat_qq_line()
+  stat_qq_line()+ labs(title = "Non Normal Distribution for Top Countries and Varieties Model")
 
 ```
 We can assume independence for this data due to way that the data was randomly collected. We have symmetrically distributed data around the y=0 line to support linearity. We also have equal variance because there is a each vertical slice in the graph has a similar spread of data.
@@ -256,16 +256,16 @@ m_int_aug2 <- augment(m_points)
 ggplot(m_int_aug2, mapping = aes(x = .fitted, y = .resid)) +
   geom_point() + 
   geom_hline(yintercept = 0, lwd = 2, col = "red", lty = 2) +
-  labs(x = "Predicted Points", y = "Residuals")
+  labs(x = "Predicted Points", y = "Residuals", title = "No Independence or Linearity for Points and Price Model")
 
 ggplot(m_int_aug2, mapping = aes(x = .resid)) +
   geom_histogram(bins = 15) + 
-  labs(x = "Residuals")
+  labs(x = "Residuals", title = "Non Normal Distribution for Points and Price Model")
 
 
 ggplot(m_int_aug2, mapping = aes(sample = .resid)) +
   stat_qq() + 
-  stat_qq_line()
+  stat_qq_line() + labs(title = "Non Normal Distribution for Points and Price Model")
 
 ```
 
@@ -655,13 +655,14 @@ austria <- relevant_countries %>%
 
 ggplot(data = austria, mapping = aes(x = price, y = weighted)) + 
     geom_point() + 
-    geom_smooth(method = "lm", se = F) 
+    geom_smooth(method = "lm", se = F) + labs(title = "Austria Has Steepest Slope for Weighted Points and Price Model",
+         y = "Log(Price/Points)",
+         x = "Price")
 
 ```
 
 
 ### Discussion
-
 
   Our analyses showed that the highest rated wines are from Austria, a positive relationship between price and point ratings, and also some small differences words used to describe highly rated and poorly rated wines.
   
