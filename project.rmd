@@ -41,7 +41,7 @@ A description of the columns of our data set are as follows
 
 ### Glimpse of data
 
-```{r, echo = FALSE}
+```{r glimpse,  message = F, warning = F, echo = F}
 glimpse(wine_data)
 ```
 ### Methodology
@@ -124,7 +124,7 @@ We followed this same methodology in order to calculate the bottom 5 rated varie
 
 We then created density plots for the point distribution for the top 5 varieties and top 5 countries. 
 
-```{r, echo = FALSE}
+```{r points_countries_density, message = F, warning = F, echo = F}
 country_counts <- wine_data %>%
     group_by(country) %>%
     count(country) %>%
@@ -145,7 +145,7 @@ ggplot(data = top_countries, mapping = aes(points)) +
 
 The density plots of the point distribution for the top five countries are consistent with the mean point values calculated earlier. Austria has a very high density of wine scores around 90 that likely contributes to the country's higher average wine point score. 
 
-```{r, echo= FALSE}
+```{r points_variety_density, message = F, warning = F, echo = F}
 
 top_var <- wine_data %>% 
   filter(variety == "Gewürztraminer" |
@@ -162,7 +162,7 @@ ggplot(data = top_var, mapping = aes(points)) +
 ```
 The density plots for the point values for the top five varieties of wine display an interesting trend. Gewürztraminer, Pinot Gris, Pinot Noir, and Riesling varieties show more evenly distributed point values for wines whereas Grüner Veltliner's data distribution is concentrated around the 90 point value. Unlike with Austria, however, this larger density of wines around the 90 point value did not make the Grüner Veltliner the variety with the best average point value.
 
-```{r}
+```{r price_countries_density, message = F, warning = F, echo = F}
 
 top_countries <- wine_data %>% 
   filter(country == "Austria" |
@@ -173,12 +173,13 @@ top_countries <- wine_data %>%
 
 ggplot(data = top_countries, mapping = aes(price)) + 
   geom_density() + 
-  facet_wrap(~country)
+  facet_wrap(~country) +
+  labs(x = "Price", y = "Density", title = "The majority of wines in all top countries are cheap")
 
 ```
 
 
-```{r}
+```{r price_variety_desnsity, message = F, warning = F, echo = F}
 
 top_var <- wine_data %>% 
   filter(variety == "Gewürztraminer" |
@@ -189,7 +190,8 @@ top_var <- wine_data %>%
 
 ggplot(data = top_var, mapping = aes(price)) + 
   geom_density() + 
-  facet_wrap(~variety)
+  facet_wrap(~variety)+
+  labs(x = "Price(USD)", y = "Density", title = "The majority of wines in all top varieties are cheap")
 
 ```
 
@@ -201,7 +203,7 @@ We conducted the following tests below to evaluate our hypotheses.
 
 We evaluated the data below to characterize how appropriate it is to create a linear model for the data.
 
-```{r}
+```{r points_price_lm, message = F, warning = F, echo = F}
 
 m_int <- lm(points ~ price, 
             data = wine_data) 
@@ -211,7 +213,7 @@ m_int %>%
 
 ```
 
-```{r}
+```{r lm_tests, message = F, warning = F, echo = F}
 
 lmthingy <- wine_data %>%
   mutate (top_countries = ifelse(country == "Austria" | country == "France"| country == "US" | country == "Italy" | country == "Germany", 1, 0)) %>%
@@ -244,9 +246,9 @@ We do not have data to support normality as seen where the right portion of the 
 
 2. We created another linear model to predict the number of points that a wine would receive depending on whether or not it was made in a top country or not and whether it was a top variety or not.
 
-We evaluated the data below to characterize how appropriate it isto create a linear model for the data.
+We evaluated the data below to characterize how appropriate it is to create a linear model for the data.
 
-```{r}
+```{r lm_tests_2, message = F, warning = F, echo = F}
 
 m_points <- glm(points ~ price, data = wine_data)
 tidy(m_points)
@@ -283,7 +285,7 @@ We know that it is appropriate to use a CLT based test because the samples are i
 
 ### Results
 
-``` {r, echo = FALSE}
+``` {r points_price_lm_2, message = F, warning = F, echo = F}
 m_points = glm(points ~ price, data = wine_data)
 tidy(m_points)
 ```
@@ -291,7 +293,7 @@ predicted points = -440.214 + 5.351(price)
 
 For every dollar increase in price, holding all other variables constant, we can expect that there will be a 0.03211381 increase in points.
 
-```{r, echo = FALSE}
+```{r points_top_5_lm,  message = F, warning = F, echo = F}
 
 lmthingy <- wine_data %>%
   mutate (top_countries = ifelse(country == "Austria" | country == "France"| country == "US" | country == "Italy" | country == "Germany", 1, 0)) %>%
@@ -643,10 +645,10 @@ ggplot(data = weighted_avg, mapping = aes(x = price, y = weighted)) +
          x = "Price")
 
 ```
-*** we are trying to make graph that has countries on the x axis and a weighted count of wines on the y axis. the weighted count will be equal to the count of wines in the top 100 times the weighted points/ price score. 
 
 
-```{r}
+
+```{r austria_vis, message = F, warning = F, echo = F}
 
 austria <- relevant_countries %>% 
     mutate(weighted = log((price/points), base = exp(1))) %>% 
@@ -664,7 +666,9 @@ ggplot(data = austria, mapping = aes(x = price, y = weighted)) +
 
 ### Discussion
 
+
   Our analyses showed that the highest rated wines are from Austria, a positive relationship between price and point ratings, and also some small differences words used to describe highly rated and poorly rated wines.
+
   
 Top Countries and Varieties
   
