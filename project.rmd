@@ -25,7 +25,7 @@ We obtained this data set from Kaggle, where user zackthoutt on Kaggle had colle
 
 ### Methodology
  
-``` {r highest_average_score_by_country, echo = FALSE, warning = F, message = F, eval = F}
+``` {r highest_average_score_by_country, echo = FALSE, warning = F, message = F}
 country_counts <- wine_data %>%
     group_by(country) %>%
     count(country) %>%
@@ -41,7 +41,7 @@ best_country <- relevant_countries %>%
     group_by(country) %>%
     summarize(avg = mean(points)) %>%
     arrange(desc(avg))
-best_country
+
 
 median_country <- median(relevant_countries$points)
 mean_country <- mean(relevant_countries$points)
@@ -58,13 +58,13 @@ weighted_avg_test <- wine_data %>%
 
 We performed basic exploratory analyses to get a feel for our data. When filtering only for countries with 100 or more wines present, the ratings generally fell in a narrow range (median 89, mean 88.86), with Austria having the highest average rating of 90.79 and Argentina having the lowest average rating of 86.51. Contrary to our hypothesis, Italy and France were not the top two countries. The top 5 countries with the highest average wine score are Austria, Germany, France, US, and Italy in that order. 
 
-```{r highest_average_points_by_variety, warning = F, message = F, echo= FALSE, eval = F}
+```{r highest_average_points_by_variety, warning = F, message = F, echo= FALSE}
 variety_means <- wine_data %>% 
     group_by(variety) %>% 
     summarize(mean = mean(points)) %>% 
     arrange(desc(mean)) %>% 
     top_n(5)
-variety_means
+
 
 variety_counts <- wine_data %>%
     group_by(variety) %>%
@@ -77,7 +77,7 @@ variety_means_more_than_50 <- wine_data %>%
     arrange(desc(mean)) %>% 
     filter(variety %in% variety_counts$variety) %>%
     top_n(5)
-variety_means_more_than_50
+
 ```
 
 We calculated the top 5 best rated varieties of wine similarly. After filtering only for varieties that have 50 or more wines present, the top varieties presented in this calculation were Gewürztraminer, Grüner Veltliner, Pinot Gris, Pinot Noir, and Riesling. 
