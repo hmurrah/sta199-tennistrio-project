@@ -10,7 +10,6 @@ library(tidytext)
 wine_data <- read_csv("data/winemag-data_first150k.csv") 
 knitr::opts_chunk$set(warning = FALSE, message = FALSE, echo = FALSE)
 ```
-
 ### Introduction
 
 People have cultivated and appreciated wines for millennia. In fact, the oldest known winery was found in a cave outside of a village in Armenia and dates back to 4,100 BC. Since then, wine production and consumption has spread throughout the globe and become a important part of many cultures. Today, wine is largely used as a celebratory drink during activities like weddings or holidays. Fine wines are often more expensive and associated with higher societal status or class[1].
@@ -200,19 +199,9 @@ The density plots for the top five varieties and top five countries all look gen
  
 We conducted the following tests below to evaluate our hypotheses.
 
-1. We created a linear model for the predicted points a wine received based on the price of a wine.
+1. We created a linear model to predict points depending on if the wine was in a top country or not and depending on if the wine was in a top variety or not. We found sufficient evidence to suggest that wines in top countries and varieties have larger point values, while controlling for other variables such as price.  
 
-We evaluated the data below to characterize how appropriate it is to create a linear model for the data.
-
-```{r points_price_lm, message = F, warning = F, echo = F}
-
-m_int <- lm(points ~ price, 
-            data = wine_data) 
-m_int %>%
-  tidy() %>%
-  select(term, estimate)
-
-```
+We also found that the data had independence, linearity, and equal variance to support the use of a linear model analysis. It should be noted that the data did not display normality.
 
 ```{r lm_tests, message = F, warning = F, echo = F}
 
@@ -226,55 +215,7 @@ tidy(modell)
 
 m_int_aug <- augment(modell)
 
-ggplot(m_int_aug, mapping = aes(x = .fitted, y = .resid)) +
-  geom_point() + 
-  geom_hline(yintercept = 0, lwd = 2, col = "red", lty = 2) +
-  labs(x = "Predicted Points", y = "Residuals") +   labs(title = "Independence and Linearity for Top Countries and Varieties Model")
-
-ggplot(m_int_aug, mapping = aes(x = .resid)) +
-  geom_histogram(bins = 15) + 
-  labs(x = "Residuals") + labs(title = "Non Normal Distribution for Top Countries and Varieties Model")
-
-
-ggplot(m_int_aug, mapping = aes(sample = .resid)) +
-  stat_qq() + 
-  stat_qq_line()+ labs(title = "Non Normal Distribution for Top Countries and Varieties Model")
-
 ```
-We can assume independence for this data due to the way that the data was randomly collected. We have symmetrically distributed data around the y=0 line to support linearity. We also have equal variance because each vertical slice in the graph has a similar spread of data.
-
-We do not have data to support normality as seen where the right portion of the final graph does not follow the line for normally distributed data. 
-
-2. We created another linear model to predict the number of points that a wine would receive depending on whether or not it was made in a top country and whether it was a top variety or not.
-
-We evaluated the data below to characterize how appropriate it is to create a linear model for the data.
-
-```{r lm_tests_2, message = F, warning = F, echo = F}
-
-m_points <- glm(points ~ price, data = wine_data)
-tidy(m_points)
-
-m_int_aug2 <- augment(m_points)
-
-ggplot(m_int_aug2, mapping = aes(x = .fitted, y = .resid)) +
-  geom_point() + 
-  geom_hline(yintercept = 0, lwd = 2, col = "red", lty = 2) +
-  labs(x = "Predicted Points", y = "Residuals", title = "No Independence or Linearity for Points and Price Model")
-
-ggplot(m_int_aug2, mapping = aes(x = .resid)) +
-  geom_histogram(bins = 15) + 
-  labs(x = "Residuals", title = "Non Normal Distribution for Points and Price Model")
-
-
-ggplot(m_int_aug2, mapping = aes(sample = .resid)) +
-  stat_qq() + 
-  stat_qq_line() + labs(title = "Non Normal Distribution for Points and Price Model")
-
-```
-
-We can assume independence for this data due to the way that the data was randomly collected. We have equal variance because there is a each vertical slice in the graph has a similar spread of data. 
-
-Nevertheless, we do not have symmetrically distributed data around the y=0 line to support linearity. Additionally, we do not have evidence to support normality as seen where the left portion of the final graph does not follow the line for normally distributed data. 
 
 3. We used a CLT based t test to determine whether there is a statistically significant difference between the highest rated country's average score and the average wine score for all countries.
 
@@ -311,10 +252,7 @@ This is a linear model that shows the predicted number of points for a particula
 
 88.13 is the predicted point value of a wine assuming all other variables are 0. This means that if the wine was not in a top country and not in a top variety, this is the estimated point value.
 
-While holding all other variables constant, a wine from one of the five top countries is expected to have a predicted point value that is 0.66 points higher than a wine from any other country.
-
-While holding all other variables constant, a wine from one of the five top varieties is expected to have a predicted point value that is 1.145 points higher than a wine from any other variety
-
+While holding all other variables constant, a wine from one of the five top countries is expected to have a predicted point value that is 0.66 points higher than a wine from any other country and a  wine from one of the five top varieties is expected to have a predicted point value that is 1.145 points higher than a wine from any other variety.
 
 ``` {r average_wine_score_clt, message = FALSE, warning = FALSE, echo = FALSE}
 t.test(wine_data$points,
