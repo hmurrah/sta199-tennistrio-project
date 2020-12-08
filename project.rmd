@@ -20,35 +20,11 @@ We investigated wine ratings from wine enthusiasts around the globe using wine r
 
 Our main motivation for investigating wine data is pure interest and desire to understand how to select the best wine. We are specifically interested in how the perceived quality of these wines varies based on where they were produced. Additionally, we want to understand what words wine enthusiasts use to describe highly rated wines versus lower rated wines. Finally, in an attempt to find the best wine to buy, we want to investigate and characterize what wines have the best value for their rating. We hypothesize that the best wines are also the most expensive wines, come from France and Italy, and are described using positive descriptors.
 
-### Data Description
+We obtained this data set from Kaggle, where user zackthoutt on Kaggle had collected it by scraping data from WineEnthusiast.com. The variables that we utilized in our analysis were: `country`: The country that the wine is from, `description`: A few sentences from a sommelier describing the wine's taste, smell, look, feel, etc., `points`: The number of points WineEnthusiast rated the wine on a scale of 1-100 (though they say they only post reviews for wines that score $\geq$ 80), `price`: The cost for a bottle of the wine, `variety`: The type of grapes used to make the wine (ie Pinot Noir)
 
-User zackthoutt on Kaggle collected this data by scraping data from WineEnthusiast.com.
-
-A description of the columns of our data set are as follows
-
-- `X1`: Number corresponding to the observation. Listed in ascending order from 0
-- `country`: The country that the wine is from
-- `description`: A few sentences from a sommelier describing the wine's taste, smell, look, feel, etc.
-- `designation`: The vineyard within the winery where the grapes that made the wine are from
-- `points`: The number of points WineEnthusiast rated the wine on a scale of 1-100 (though they say they only post reviews for wines that score $\geq$ 80)
-- `price`: The cost for a bottle of the wine
-- `province`: The province or state that the wine is from
-- `region_1`: The wine growing area in a province or state (ie Napa)
-- `region_2`: Sometimes there are more specific regions specified within a wine growing area (ie Rutherford inside the Napa Valley), but this value can sometimes be blank
-- `variety`: The type of grapes used to make the wine (ie Pinot Noir)
-- `winery`: The winery that made the wine
-
-### Glimpse of data
-
-```{r glimpse,  message = F, warning = F, echo = F}
-glimpse(wine_data)
-```
 ### Methodology
  
-We first calculated on average which countries have the highest rated wines by finding the mean scores of each country and summarizing the data into a table. We did the same calculation for top varieties of wine.
-
-Countries with Highest Average Wine Point Score
-``` {r highest_average_score_by_country, echo = FALSE, warning = F, message = F}
+``` {r highest_average_score_by_country, echo = FALSE, warning = F, message = F, eval = F}
 country_counts <- wine_data %>%
     group_by(country) %>%
     count(country) %>%
@@ -63,9 +39,11 @@ best_country <- relevant_countries %>%
     select(country, points, price) %>%
     group_by(country) %>%
     summarize(avg = mean(points)) %>%
-    arrange(desc(avg)) %>%
-    top_n(5)
+    arrange(desc(avg))
 best_country
+
+median_country <- median(relevant_countries$points)
+mean_country <- mean(relevant_countries$points)
 
 score_test <- wine_data %>%
     filter(!is.na(country)) %>%
@@ -75,15 +53,11 @@ score_test <- wine_data %>%
 weighted_avg_test <- wine_data %>%
     group_by(country) %>%
     mutate(weighted_count = (points/price))
-
-
 ```
 
-Contrary to our hypothesis, Italy and France were not the top two countries. Both Austria and Germany had on average higher point ratings for their wines than these two countries. The top 5 countries with the highest average wine score are Austria, Germany, France, US, and Italy in that order. 
+We performed basic exploratory analyses to get a feel for our data. When filtering only for countries with 100 or more wines present, the ratings generally fell in a narrow range (median 89, mean 88.86), with Austria having the highest average rating of 90.79 and Argentina having the lowest average rating of 86.51. Contrary to our hypothesis, Italy and France were not the top two countries. The top 5 countries with the highest average wine score are Austria, Germany, France, US, and Italy in that order. 
 
-Varieties with the Highest Average Wine Point Score
-
-```{r highest_average_points_by_variety, warning = F, message = F, echo= FALSE}
+```{r highest_average_points_by_variety, warning = F, message = F, echo= FALSE, eval = F}
 variety_means <- wine_data %>% 
     group_by(variety) %>% 
     summarize(mean = mean(points)) %>% 
@@ -105,9 +79,7 @@ variety_means_more_than_50 <- wine_data %>%
 variety_means_more_than_50
 ```
 
-We calculated the top 5 best rated varieties of wine similarly. Our first calculation returned Cabernet-Shiraz, Cabernet Sauvignon-Shiraz, Blauburgunder, Friulano, and Carignan as the top rated wine varieties. However, after observing the data, we noticed that these wine varieties had a relatively small number of wines represented in the entire data set. To try to better represent the varieties of wines with consistently top rated products, we filtered to only include wine varieties with at least 50 wine ratings represented in the data set. The top varieties presented in this calculation were Gewürztraminer, Grüner Veltliner, Pinot Gris, Pinot Noir, and Riesling. 
-
-Varieties with the Lowest Average Wine Point Score
+We calculated the top 5 best rated varieties of wine similarly. After filtering only for varieties that have 50 or more wines present, the top varieties presented in this calculation were Gewürztraminer, Grüner Veltliner, Pinot Gris, Pinot Noir, and Riesling. 
 
 ``` {r lowest_average_points_by_variety, message = F, warning = F, echo = F}
 variety_means_more_than_50_bottom_5 <- wine_data %>%
@@ -119,7 +91,7 @@ variety_means_more_than_50_bottom_5 <- wine_data %>%
 variety_means_more_than_50_bottom_5
 ```
 
-We followed this same methodology in order to calculate the bottom 5 rated varieties. We again filtered the data to only consider varieties with 50 or more samples in the data set. The bottom 5 varieties from this calculation were Portuguese White, Merlot, Malbec, White Blend, and Viognier.
+We again filtered the data to only consider varieties with 50 or more samples in the data set but this time found the bottom 5 varieties. The bottom 5 were Portuguese White, Merlot, Malbec, White Blend, and Viognier.
 
 We then created density plots for the point distribution for the top 5 varieties and top 5 countries. 
 
