@@ -517,10 +517,8 @@ Top Countries and Varieties
 Relationship Between Price and Points  
 
   In addition to the calculation of the top countries and varieties, the linear models for predicted price both give evidence for a positive strong relationship between price and points. 
-  The linear model that predicted the number of points a wine would receive with a price factor had a p value of 3.77e-311 for the price factor. At an alpha level of 0.05, this gives strong evidence against a null hypothesis that there is no relationship between price and points.
   The linear model with top countries and top variety factors gave p values of 5.56e-21 and 1.63e-56, respectively. At an alpha level of 0.05, this gives strong evidence against a null hypothesis which is that there is no relationship between being in the top variety or country and the point value.
   This means that when choosing a wine to maximize points awarded by wine connoisseurs, it makes the most sense to choose a wine from one of these top countries and varieties. 
-  It should be noted that in the data the first linear model showed was not normally distributed and did not have linearity. The data for the second linear model was not normally distributed. This makes analysis using a linear model less effective.
   Our weighted model graphically depicts the trend that as points goes up, so does price. We used a log transformation on the graph because the data was very right skewed and this transformation best displayed the relationship between the weighted variable and the price in a linear fashion. Although Austria has a relatively low sample size, the line fitted to Austria's wine data has the steepest slope which is consistent with the conclusion that Austria has the best wine for its price. 
 
 Text Analysis
