@@ -9,6 +9,8 @@ library(tidyverse)
 library(tidytext)
 wine_data <- read_csv("data/winemag-data_first150k.csv") 
 knitr::opts_chunk$set(warning = FALSE, message = FALSE, echo = FALSE)
+aspect_ratio <- 2.5
+height <- 7
 ```
 ### Introduction
 
@@ -88,14 +90,13 @@ variety_means_more_than_50_bottom_5 <- wine_data %>%
     arrange((mean)) %>% 
     filter(variety %in% variety_counts$variety) %>%
     top_n(-5)
-variety_means_more_than_50_bottom_5
 ```
 
 We again filtered the data to only consider varieties with 50 or more samples in the data set but this time found the bottom 5 varieties. The bottom 5 were Portuguese White, Merlot, Malbec, White Blend, and Viognier.
 
 We then created density plots for the point distribution for the top 5 varieties and top 5 countries. 
 
-```{r points_countries_density, message = F, warning = F, echo = F}
+```{r points_countries_density, message = F, warning = F, echo = F, eval = F}
 country_counts <- wine_data %>%
     group_by(country) %>%
     count(country) %>%
@@ -116,7 +117,7 @@ ggplot(data = top_countries, mapping = aes(points)) +
 
 The density plots of the point distribution for the top five countries are consistent with the mean point values calculated earlier. Austria has a very high density of wine scores around 90 that likely contributes to the country's higher average wine point score. 
 
-```{r points_variety_density, message = F, warning = F, echo = F}
+```{r points_variety_density, message = F, warning = F, echo = F, eval = F}
 
 top_var <- wine_data %>% 
   filter(variety == "Gewürztraminer" |
@@ -134,7 +135,7 @@ ggplot(data = top_var, mapping = aes(points)) +
 
 The density plots for the point values for the top five varieties of wine display an interesting trend. Gewürztraminer, Pinot Gris, Pinot Noir, and Riesling varieties show more evenly distributed point values for wines whereas Grüner Veltliner's data distribution is concentrated around the 90 point value. Unlike with Austria, however, this larger density of wines around the 90 point value did not make the Grüner Veltliner the variety with the best average point value.
 
-```{r price_countries_density, message = F, warning = F, echo = F}
+```{r price_countries_density, message = F, warning = F, echo = F, eval = F}
 
 top_countries <- wine_data %>% 
   filter(country == "Austria" |
@@ -151,7 +152,7 @@ ggplot(data = top_countries, mapping = aes(price)) +
 ```
 
 
-```{r price_variety_desnsity, message = F, warning = F, echo = F}
+```{r price_variety_desnsity, message = F, warning = F, echo = F, eval = F}
 
 top_var <- wine_data %>% 
   filter(variety == "Gewürztraminer" |
@@ -175,7 +176,7 @@ We conducted the following tests below to evaluate our hypotheses.
 
 We also found that the data had independence, linearity, and equal variance to support the use of a linear model analysis. It should be noted that the data did not display normality.
 
-```{r lm_tests, message = F, warning = F, echo = F}
+```{r lm_tests, message = F, warning = F, echo = F, eval = F}
 
 lmthingy <- wine_data %>%
   mutate (top_countries = ifelse(country == "Austria" | country == "France"| country == "US" | country == "Italy" | country == "Germany", 1, 0)) %>%
@@ -226,7 +227,7 @@ This is a linear model that shows the predicted number of points for a particula
 
 While holding all other variables constant, a wine from one of the five top countries is expected to have a predicted point value that is 0.66 points higher than a wine from any other country and a  wine from one of the five top varieties is expected to have a predicted point value that is 1.145 points higher than a wine from any other variety.
 
-``` {r average_wine_score_clt, message = FALSE, warning = FALSE, echo = FALSE}
+``` {r average_wine_score_clt, message = FALSE, warning = FALSE, echo = FALSE, eval = F}
 t.test(wine_data$points,
        mu = 90.93939,
        alternative = "two.sided")
@@ -535,7 +536,7 @@ On the expensive side, we see the words oak, aging, and berry. Perhaps it is the
 Similarly, we see that cherry is 10th most commonly occurring word for the cheap wines and it is also the most commonly occurring word for the top 5 wines. This is a very interesting correlation and, when paired with our observations from the previous paragraph, make us begin to question whether paying more for wine is really worth it overall. There are certainly outliers on both sides, but it seems that there tends to be a correlation between cheap wine and highly rated wine, as well as one between expensive wine and lowly rated wine.
 
 
-``` {r weighted_wine_scores_to_price, message = FALSE, warning = FALSE, echo = FALSE}
+``` {r weighted_wine_scores_to_price, message = FALSE, warning = FALSE, echo = FALSE, eval = F}
 weighted_avg <- wine_data %>%
     group_by(country)%>%
     summarize(country, winery, variety, price, country, points, weighted = points/price) %>%
@@ -558,7 +559,7 @@ ggplot(data = weighted_avg, mapping = aes(x = price, y = weighted)) +
 
 
 
-```{r austria_vis, message = F, warning = F, echo = F}
+```{r austria_vis, message = F, warning = F, echo = F, eval = F}
 
 austria <- relevant_countries %>% 
     mutate(weighted = log((price/points), base = exp(1))) %>% 
