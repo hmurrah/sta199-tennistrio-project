@@ -22,9 +22,25 @@ We investigated wine ratings from wine enthusiasts around the globe using wine r
 
 Our main motivation for investigating wine data is pure interest and desire to understand how to select the best wine. We are specifically interested in how the perceived quality of these wines varies based on where they were produced. Additionally, we want to understand what words wine enthusiasts use to describe highly rated wines versus lower rated wines. Finally, in an attempt to find the best wine to buy, we want to investigate and characterize what wines have the best value for their rating. We hypothesize that the best wines are also the most expensive wines, come from France and Italy, and are described using positive descriptors.
 
+### Methodology
+
 We obtained this data set from Kaggle, where user zackthoutt on Kaggle had collected it by scraping data from WineEnthusiast.com. The variables that we utilized in our analysis were: `country`: The country that the wine is from, `description`: A few sentences from a sommelier describing the wine's taste, smell, look, feel, etc., `points`: The number of points WineEnthusiast rated the wine on a scale of 1-100 (though they say they only post reviews for wines that score $\geq$ 80), `price`: The cost for a bottle of the wine, `variety`: The type of grapes used to make the wine (ie Pinot Noir)
 
-### Methodology
+We conducted the following tests below to evaluate our hypotheses.
+
+1. We created a linear model to predict points depending on if the wine was in a top country or not and depending on if the wine was in a top variety or not. We found sufficient evidence to suggest that wines in top countries and varieties have larger point values, while controlling for other variables such as price.  
+
+We also found that the data had independence, linearity, and equal variance to support the use of a linear model analysis. It should be noted that the data did not display normality.
+
+3. We used a CLT based t test to determine whether there is a statistically significant difference between the highest rated country's average score and the average wine score for all countries.
+
+We know that it is appropriate to use a CLT based test because the samples are independent of each other (taken randomly) due to the way that the data was collected. Moreover, n>30 in this sampling.
+
+4. We used text analysis on the description variable to pick out key word descriptors in order to determine if there is there a relationship between the descriptor and the score. We visualized this relationship.
+
+5. We calculated a weighted score for wines considering the number of points received and expense of the wine. We created a transformed linear model to observe this relationship on a graph.
+
+### Results
  
 ``` {r highest_average_score_by_country, echo = FALSE, warning = F, message = F}
 country_counts <- wine_data %>%
@@ -81,7 +97,7 @@ variety_means_more_than_50 <- wine_data %>%
 
 ```
 
-We calculated the top 5 best rated varieties of wine similarly. After filtering only for varieties that have 50 or more wines present, the top varieties presented in this calculation were Gewürztraminer, Grüner Veltliner, Pinot Gris, Pinot Noir, and Riesling. 
+We calculated the top 5 best rated varieties of wine similarly. After filtering only for varieties that have 50 or more wines present, the top 5 varieties presented in this calculation were Gewürztraminer, Grüner Veltliner, Pinot Gris, Pinot Noir, and Riesling. 
 
 ``` {r lowest_average_points_by_variety, message = F, warning = F, echo = F}
 variety_means_more_than_50_bottom_5 <- wine_data %>%
@@ -92,9 +108,9 @@ variety_means_more_than_50_bottom_5 <- wine_data %>%
     top_n(-5)
 ```
 
-We again filtered the data to only consider varieties with 50 or more samples in the data set but this time found the bottom 5 varieties. The bottom 5 were Portuguese White, Merlot, Malbec, White Blend, and Viognier.
+We again filtered the data to only consider varieties with 50 or more samples in the data set but this time found the bottom 5 varieties. The bottom 5 varieties were Portuguese White, Merlot, Malbec, White Blend, and Viognier.
 
-We then created density plots for the point distribution for the top 5 varieties and top 5 countries. 
+We then created density plots for the point distribution for the top 5 varieties and top 5 countries. The density plots of the point distribution for the top five countries are consistent with the mean point values calculated earlier. Austria has a very high density of wine scores around 90 that likely contributes to the country's higher average wine point score. 
 
 ```{r points_countries_density, message = F, warning = F, echo = F, eval = F}
 country_counts <- wine_data %>%
@@ -115,8 +131,6 @@ ggplot(data = top_countries, mapping = aes(points)) +
   labs(x = "Points", y = "Density", title = "Austria has the highest density of wines that scored 90 or above")
 ```
 
-The density plots of the point distribution for the top five countries are consistent with the mean point values calculated earlier. Austria has a very high density of wine scores around 90 that likely contributes to the country's higher average wine point score. 
-
 ```{r points_variety_density, message = F, warning = F, echo = F, eval = F}
 
 top_var <- wine_data %>% 
@@ -133,7 +147,7 @@ ggplot(data = top_var, mapping = aes(points)) +
 
 ```
 
-The density plots for the point values for the top five varieties of wine display an interesting trend. Gewürztraminer, Pinot Gris, Pinot Noir, and Riesling varieties show more evenly distributed point values for wines whereas Grüner Veltliner's data distribution is concentrated around the 90 point value. Unlike with Austria, however, this larger density of wines around the 90 point value did not make the Grüner Veltliner the variety with the best average point value.
+The density plots for the point values for the top 5 varieties of wine display an interesting trend. Gewürztraminer, Pinot Gris, Pinot Noir, and Riesling varieties show more evenly distributed point values for wines whereas Grüner Veltliner's data distribution is concentrated around the 90 point value. Unlike with Austria, however, this larger density of wines around the 90 point value did not make the Grüner Veltliner the variety with the best average point value.
 
 ```{r price_countries_density, message = F, warning = F, echo = F, eval = F}
 
@@ -168,13 +182,7 @@ ggplot(data = top_var, mapping = aes(price)) +
 
 ```
 
-The density plots for the top five varieties and top five countries all look generally similar. The data is left skewed and most of the wines are less than 100 dollars. One noticeable difference is that the Gruner Veltliner variety and Austria have cheaper wines compared to the other top varieties or countries.
- 
-We conducted the following tests below to evaluate our hypotheses.
-
-1. We created a linear model to predict points depending on if the wine was in a top country or not and depending on if the wine was in a top variety or not. We found sufficient evidence to suggest that wines in top countries and varieties have larger point values, while controlling for other variables such as price.  
-
-We also found that the data had independence, linearity, and equal variance to support the use of a linear model analysis. It should be noted that the data did not display normality.
+Overall, the density plots for the top five varieties and top five countries all look generally similar. The data is left skewed and most of the wines are less than 100 dollars. One noticeable difference is that both Austria and the Gruner Veltliner variety generally have cheaper wines compared to the other top varieties or countries.
 
 ```{r lm_tests, message = F, warning = F, echo = F, eval = F}
 
@@ -189,16 +197,6 @@ tidy(modell)
 m_int_aug <- augment(modell)
 
 ```
-
-3. We used a CLT based t test to determine whether there is a statistically significant difference between the highest rated country's average score and the average wine score for all countries.
-
-We know that it is appropriate to use a CLT based test because the samples are independent of each other (taken randomly) due to the way that the data was collected. Moreover, n>30 in this sampling.
-
-4. We used text analysis on the description variable to pick out key word descriptors in order to determine if there is there a relationship between the descriptor and the score. We visualized this relationship.
-
-5. We calculated a weighted score for wines considering the number of points received and expense of the wine. We created a transformed linear model to observe this relationship on a graph.
-
-### Results
 
 ``` {r points_price_lm_2, message = F, warning = F, echo = F}
 m_points = glm(points ~ price, data = wine_data)
