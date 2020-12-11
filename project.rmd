@@ -1,10 +1,6 @@
 ---
 title: "What Makes a Good Wine?"
-<<<<<<< HEAD
 subtitle: "A Statistical Analysis of the Best Way to Select Wine"
-=======
-subtitle: "Due Friday, November 20, 11:59 PM"
->>>>>>> c5a75f9ceba63533d97b76bf0e3cb77c52d06c35
 author: "Hamilton Murrah, Kellyn McDonald, Naima Turbes"
 output: pdf_document
 ---
@@ -17,21 +13,18 @@ knitr::opts_chunk$set(warning = FALSE, message = FALSE, echo = FALSE)
 ### Abstract
 
 
-<<<<<<< HEAD
+
 \newpage
 
 
-=======
->>>>>>> c5a75f9ceba63533d97b76bf0e3cb77c52d06c35
+
 ### Introduction
 
 People have cultivated and appreciated wines for millennia. In fact, the oldest known winery was found in a cave outside of a village in Armenia and dates back to 4,100 BC. Since then, wine production and consumption has spread throughout the globe and become a important part of many cultures. Today, wine is largely used as a celebratory drink during activities like weddings or holidays. Fine wines are often more expensive and associated with higher societal status or class[1].
 
 Most current wine production happens in Europe. In 2019, Italy produced 21.6 million hectoliters of wine and was the world's largest wine producer. The next two largest wine producers that year were Spain and France, producing 21.3 million hectoliters and 14.2 million hectoliters respectively [2]. Nevertheless, a 2019 survey from Forbes found that the the best ranked wine was from Napa Valley in the United States [3]. We are curious to see if this has changed.
 
-We investigated wine ratings from wine enthusiasts around the globe using wine ranking data scraped from WineEnthusiast.com.
-
-Our main motivation for investigating wine data is pure interest and desire to understand how to select the best wine. We are specifically interested in how the perceived quality of these wines varies based on where they were produced. Additionally, we want to understand what words wine enthusiasts use to describe highly rated wines versus lower rated wines. Finally, in an attempt to find the best wine to buy, we want to investigate and characterize what wines have the best value for their rating. We hypothesize that the best wines are also the most expensive wines, come from France and Italy, and are described using positive descriptors.
+Our main motivation for investigating wine data is pure interest and desire to understand how to select the best wine. We are specifically interested in how the perceived quality of these wines varies based on where they were produced. Additionally, we want to understand what words wine sommeliers use to describe highly rated wines versus lower rated wines. Finally, in an attempt to find the best wine to buy, we want to investigate and characterize what wines have the best value for their rating. We hypothesize that the best wines are also the most expensive wines, come from France and Italy, and are described using positive descriptors.
 
 ### Methodology
 
@@ -49,7 +42,7 @@ We know that it is appropriate to use a CLT based test because the samples are i
 
 4. We used text analysis on the description variable to pick out key word descriptors in order to determine if there is there a relationship between the descriptor and the score. We visualized this relationship.
 
-5. We calculated a weighted score for wines considering the number of points received and expense of the wine. We created a transformed linear model to observe this relationship on a graph.
+5. We calculated a weighted score for wines considering the number of points received and expense of the wine and then took the log of this value since our data is heavily right skewed. We created a transformed linear model to observe this relationship on a graph.
 
 ### Results
  
