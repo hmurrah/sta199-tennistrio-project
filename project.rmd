@@ -12,7 +12,7 @@ knitr::opts_chunk$set(warning = FALSE, message = FALSE, echo = FALSE)
 ```
 ### Abstract
 
-
+Several studies have tried to identify the "best wine" with differing results. This research study aims to characterize the relationship between a wine's country of origin, price, quality rating, variety, descriptive words. We want to use this information to guide advice on selecting the best wines. We used a dataset containing wine ratings from wine experts and conducted a number of statistical analyses on the data. We found that wines from Austria and Germany had the highest average ranking and a positive relationship between price and points awarded to a wine. Text analysis showed that expensive wines and poorly rated wines had similar descriptors. We concluded that generally more expensive wines are perceived as better, but other variables also influence a wine's ranking. For example, extremely expensive or cheap wines might deviate from this trend. In these cases, generally red and cherry wines have higher scores regardless of price.
 
 \newpage
 
@@ -172,7 +172,6 @@ ggplot(data = top_countries, mapping = aes(price)) +
   labs(x = "Price", y = "Density", title = "The majority of wines in all top countries are cheap")
 
 ```
-
 
 ```{r price_variety_desnsity, message = F, warning = F, echo = F, eval = F}
 
