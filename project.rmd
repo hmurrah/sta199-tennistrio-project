@@ -119,12 +119,6 @@ The density plots of the point distribution for the top five countries are consi
 The density plots for the point values for the top five varieties of wine display an interesting trend. Gewürztraminer, Pinot Gris, Pinot Noir, and Riesling varieties show more evenly distributed point values for wines whereas Grüner Veltliner's data distribution is concentrated around the 90 point value. Unlike with Austria, however, this larger density of wines around the 90 point value did not make the Grüner Veltliner the variety with the best average point value.
 
 The density plots for the top five varieties and top five countries all look generally similar. The data is left skewed and most of the wines are less than 100 dollars. One noticeable difference is that the Gruner Veltliner variety and Austria have cheaper wines compared to the other top varieties or countries.
- 
-We conducted the following tests below to evaluate our hypotheses.
-
-1. We created a linear model to predict points depending on if the wine was in a top country or not and depending on if the wine was in a top variety or not. We found sufficient evidence to suggest that wines in top countries and varieties have larger point values, while controlling for other variables such as price.  
-
-We also found that the data had independence, linearity, and equal variance to support the use of a linear model analysis. It should be noted that the data did not display normality.
 
 ```{r points_countries_density, message = F, warning = F, echo = F, eval = F}
 country_counts <- wine_data %>%
@@ -209,22 +203,14 @@ modell <- lm(points ~ top_countries + top_varieties, data = lmthingy)
 tidy(modell)
 
 m_int_aug <- augment(modell)
-
 ```
-
-4. We used text analysis on the description variable to pick out key word descriptors in order to determine if there is there a relationship between the descriptor and the score. We visualized this relationship.
-
-5. We calculated a weighted score for wines considering the number of points received and expense of the wine. We created a transformed linear model to observe this relationship on a graph.
 
 ### Results
 
-``` {r points_price_lm_2, message = F, warning = F, echo = F}
+``` {r points_price_lm_2, message = F, warning = F, echo = F, eval = F}
 m_points = glm(points ~ price, data = wine_data)
 tidy(m_points)
 ```
-predicted points = -440.214 + 5.351(price)
-
-For every dollar increase in price, holding all other variables constant, we can expect that there will be a 0.03211381 increase in points.
 
 ```{r points_top_5_lm,  message = F, warning = F, echo = F}
 
