@@ -200,38 +200,20 @@ lmthingy <- wine_data %>%
 
  
 modell <- lm(points ~ top_countries + top_varieties, data = lmthingy)
-tidy(modell)
 
 m_int_aug <- augment(modell)
 ```
-
-### Results
 
 ``` {r points_price_lm_2, message = F, warning = F, echo = F, eval = F}
 m_points = glm(points ~ price, data = wine_data)
 tidy(m_points)
 ```
 
-```{r points_top_5_lm,  message = F, warning = F, echo = F}
-
-lmthingy <- wine_data %>%
-  mutate (top_countries = ifelse(country == "Austria" | country == "France"| country == "US" | country == "Italy" | country == "Germany", 1, 0)) %>%
-  mutate (top_varieties = ifelse(variety == "Gewürztraminer" | variety == "Grüner Veltliner"| variety == "Pinot Gris" | variety == "Pinot Noir" | variety == "Riesling", 1, 0))
- 
-modell <- lm(points ~ top_countries + top_varieties, data = lmthingy)
-tidy(modell)
-
-```
-
 predicted points = 88.13 + 0.66(topcountry) + 1.145(topvariety)
 
-This is a linear model that shows the predicted number of points for a particular wine given whether or not the wine is from a top country and whether or not the wine is from a top variety.
+This is a linear model that shows the predicted number of points for a particular wine given whether or not the wine is from a top country and whether or not the wine is from a top variety. 88.13 is the predicted point value of a wine assuming all other variables are 0. This means that if the wine was not in a top country and not in a top variety, this is the estimated point value. While holding all other variables constant, a wine from one of the five top countries is expected to have a predicted point value that is 0.66 points higher than a wine from any other country and a  wine from one of the five top varieties is expected to have a predicted point value that is 1.145 points higher than a wine from any other variety.
 
-88.13 is the predicted point value of a wine assuming all other variables are 0. This means that if the wine was not in a top country and not in a top variety, this is the estimated point value.
-
-While holding all other variables constant, a wine from one of the five top countries is expected to have a predicted point value that is 0.66 points higher than a wine from any other country and a  wine from one of the five top varieties is expected to have a predicted point value that is 1.145 points higher than a wine from any other variety.
-
-``` {r average_wine_score_clt, message = FALSE, warning = FALSE, echo = FALSE}
+``` {r average_wine_score_clt, message = FALSE, warning = FALSE, echo = FALSE, eval = F}
 t.test(wine_data$points,
        mu = 90.93939,
        alternative = "two.sided")
@@ -535,6 +517,10 @@ In order to test these hypotheses in a future analysis we could count these word
 [3] Huen, Eustacia. “The World's 30 Best Wines In 2019.” Forbes, Forbes Magazine, 26 Mar. 2019, www.forbes.com/sites/eustaciahuen/2019/03/25/wine-3/. 
 
 ### Appendix
+``` {r lm_model, message = F, warning = F, echo = F}
+tidy(modell)
+```
+
 ``` {r descriptor_plots_1, message = F, warning = F, echo = F, fig.height = 3, fig.width = 5}
 ggplot(data = top_5_descriptor_counts, aes(fct_reorder(word, prob), prob)) +
     geom_col(color = "darkblue", fill = "skyblue") +
