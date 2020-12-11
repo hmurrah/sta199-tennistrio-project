@@ -10,6 +10,9 @@ library(tidytext)
 wine_data <- read_csv("data/winemag-data_first150k.csv") 
 knitr::opts_chunk$set(warning = FALSE, message = FALSE, echo = FALSE)
 ```
+### Abstract
+
+
 ### Introduction
 
 People have cultivated and appreciated wines for millennia. In fact, the oldest known winery was found in a cave outside of a village in Armenia and dates back to 4,100 BC. Since then, wine production and consumption has spread throughout the globe and become a important part of many cultures. Today, wine is largely used as a celebratory drink during activities like weddings or holidays. Fine wines are often more expensive and associated with higher societal status or class[1].
@@ -540,11 +543,9 @@ ggplot(data = cheap_wine_word_counts, aes(fct_reorder(word, prob), prob)) +
          y = "Frequency")
 ```
 
-Here we are separating the wines by expensive (>= $200) and cheap (<= $10) for our analysis. 
+Here we separated the wines by expensive (>= $200) and cheap (<= $10) for our analysis. In general, the words tannins, red, black, ripe, and berry did not show any obvious differences in frequency between the highly and poorly rated wines, and these words are also present in both expensive and cheap wines. Acidity was present in all wines, but was most common descriptor for cheaper wines by a fair margin. We know from our top wine varieties that red wine tends to be rated more highly, so we expected the cheap wines to reference white more often, however this was not the case. Both cheap and expensive wines referenced red often.
 
-The words tannins, red, black, ripe, and berry did not show any obvious differences in frequency between the two categories, but they are present in both expensive and cheap wines. Acidity was present in all wines, but was most common descriptor for cheaper wines by a fair margin. Moreover, categories have the word red fairly often (presumably referencing red wine) and we know from our top wine varieties that red wine tends to be rated more highly. We expected the cheap wines to reference white more often, however this was not the case.
-
-On the expensive side, we see the words oak, aging, and berry. Perhaps it is the case that these expensive wines are more likely to be stored and aged in higher quality barrels (oak may be the preferred substance) than cheaper ones. The presence of aging makes sense since there tends to be a correlation between older wines and higher prices. Berry is intriguing though. Recall that berry was one of the descriptors present in the bottom 5 wines from above. We find it very interesting that there is this correlation between expensive wines and lowly rated wines. Additionally, both black and ripe appear in the same places in the expensive chart as they do in the bottom 5 wine chart. While both of these words are also present in the cheaper wine charts, this is expected as we hypothesized that cheaper wines would correlate higher with lower rated wines. This leads us to the conclusion that more expensive wines do not necessarily imply higher scoring wines. There may even be correlations to the contrary. 
+On the expensive side, we see the words oak, aging, and berry in high frequency. Perhaps it is the case that these expensive wines are more likely to be stored and aged in higher quality barrels (oak may be the preferred substance) than cheaper ones. The presence of aging makes sense since there tends to be a correlation between older wines and higher prices. It is notable that the descriptors berry, black, and ripe were frequent in expensive wines and in the five most poorly rated wines. This supports the idea that more expensive wines do not necessarily imply higher scoring wines.  
 
 Similarly, we see that cherry is 10th most commonly occurring word for the cheap wines and it is also the most commonly occurring word for the top 5 wines. This is a very interesting correlation and, when paired with our observations from the previous paragraph, make us begin to question whether paying more for wine is really worth it overall. There are certainly outliers on both sides, but it seems that there tends to be a correlation between cheap wine and highly rated wine, as well as one between expensive wine and lowly rated wine.
 
@@ -603,17 +604,16 @@ Top Countries and Varieties
   
 Relationship Between Price and Points  
 
-<<<<<<< HEAD
   In addition to the calculation of the top countries and varieties, the linear models for predicted price both give evidence for a positive strong relationship between price and points. 
   The linear model with top countries and top variety factors gave p values of 5.56e-21 and 1.63e-56, respectively. At an alpha level of 0.05, this gives strong evidence against a null hypothesis which is that there is no relationship between being in the top variety or country and the point value.
   This means that when choosing a wine to maximize points awarded by wine connoisseurs, it makes the most sense to choose a wine from one of these top countries and varieties. 
   Our weighted model graphically depicts the trend that as points goes up, so does price. We used a log transformation on the graph because the data was very right skewed and this transformation best displayed the relationship between the weighted variable and the price in a linear fashion. Although Austria has a relatively low sample size, the line fitted to Austria's wine data has the steepest slope which is consistent with the conclusion that Austria has the best wine for its price. 
-=======
+
   The linear models for predicted price both give evidence for a positive strong relationship between price and points. 
   The linear model that predicted the number of points a wine would receive with a price factor had a p value of 3.77e-311 for the price factor. At an alpha level of 0.05, this gives strong evidence against a null hypothesis that there is no relationship between price and points.
   The linear model with top countries and top variety factors gave p values of 5.56e-21 and 1.63e-56, respectively. At an alpha level of 0.05, this gives strong evidence against a null hypothesis that there is no relationship between being in the top variety or country and the point value.
   This means that when choosing a wine to maximize points awarded by wine connoisseurs, it makes the most sense to choose a wine from one of these top countries and varieties. It should be noted that the data for the linear model was not normally distributed. This makes analysis using a linear model less effective.
->>>>>>> 9420243d591992e7922d13163e493df3339c8d06
+
 
 Text Analysis
   
