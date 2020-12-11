@@ -1,6 +1,10 @@
 ---
 title: "What Makes a Good Wine?"
+<<<<<<< HEAD
 subtitle: "A Statistical Analysis of the Best Way to Select Wine"
+=======
+subtitle: "Due Friday, November 20, 11:59 PM"
+>>>>>>> c5a75f9ceba63533d97b76bf0e3cb77c52d06c35
 author: "Hamilton Murrah, Kellyn McDonald, Naima Turbes"
 output: pdf_document
 ---
@@ -9,15 +13,16 @@ library(tidyverse)
 library(tidytext)
 wine_data <- read_csv("data/winemag-data_first150k.csv") 
 knitr::opts_chunk$set(warning = FALSE, message = FALSE, echo = FALSE)
-aspect_ratio <- 2.5
-height <- 7
 ```
 ### Abstract
 
 
+<<<<<<< HEAD
 \newpage
 
 
+=======
+>>>>>>> c5a75f9ceba63533d97b76bf0e3cb77c52d06c35
 ### Introduction
 
 People have cultivated and appreciated wines for millennia. In fact, the oldest known winery was found in a cave outside of a village in Armenia and dates back to 4,100 BC. Since then, wine production and consumption has spread throughout the globe and become a important part of many cultures. Today, wine is largely used as a celebratory drink during activities like weddings or holidays. Fine wines are often more expensive and associated with higher societal status or class[1].
@@ -116,7 +121,17 @@ variety_means_more_than_50_bottom_5 <- wine_data %>%
 
 We again filtered the data to only consider varieties with 50 or more samples in the data set but this time found the bottom 5 varieties. The bottom 5 varieties were Portuguese White, Merlot, Malbec, White Blend, and Viognier.
 
-We then created density plots for the point distribution for the top 5 varieties and top 5 countries. The density plots of the point distribution for the top five countries are consistent with the mean point values calculated earlier. Austria has a very high density of wine scores around 90 that likely contributes to the country's higher average wine point score. 
+The density plots of the point distribution for the top five countries are consistent with the mean point values calculated earlier. Austria has a very high density of wine scores around 90 that likely contributes to the country's higher average wine point score. 
+
+The density plots for the point values for the top five varieties of wine display an interesting trend. Gewürztraminer, Pinot Gris, Pinot Noir, and Riesling varieties show more evenly distributed point values for wines whereas Grüner Veltliner's data distribution is concentrated around the 90 point value. Unlike with Austria, however, this larger density of wines around the 90 point value did not make the Grüner Veltliner the variety with the best average point value.
+
+The density plots for the top five varieties and top five countries all look generally similar. The data is left skewed and most of the wines are less than 100 dollars. One noticeable difference is that the Gruner Veltliner variety and Austria have cheaper wines compared to the other top varieties or countries.
+ 
+We conducted the following tests below to evaluate our hypotheses.
+
+1. We created a linear model to predict points depending on if the wine was in a top country or not and depending on if the wine was in a top variety or not. We found sufficient evidence to suggest that wines in top countries and varieties have larger point values, while controlling for other variables such as price.  
+
+We also found that the data had independence, linearity, and equal variance to support the use of a linear model analysis. It should be noted that the data did not display normality.
 
 ```{r points_countries_density, message = F, warning = F, echo = F, eval = F}
 country_counts <- wine_data %>%
@@ -190,7 +205,7 @@ ggplot(data = top_var, mapping = aes(price)) +
 
 Overall, the density plots for the top five varieties and top five countries all look generally similar. The data is left skewed and most of the wines are less than 100 dollars. One noticeable difference is that both Austria and the Gruner Veltliner variety generally have cheaper wines compared to the other top varieties or countries.
 
-```{r lm_tests, message = F, warning = F, echo = F, eval = F}
+```{r lm_tests, message = F, warning = F, echo = F}
 
 lmthingy <- wine_data %>%
   mutate (top_countries = ifelse(country == "Austria" | country == "France"| country == "US" | country == "Italy" | country == "Germany", 1, 0)) %>%
@@ -203,6 +218,12 @@ tidy(modell)
 m_int_aug <- augment(modell)
 
 ```
+
+4. We used text analysis on the description variable to pick out key word descriptors in order to determine if there is there a relationship between the descriptor and the score. We visualized this relationship.
+
+5. We calculated a weighted score for wines considering the number of points received and expense of the wine. We created a transformed linear model to observe this relationship on a graph.
+
+### Results
 
 ``` {r points_price_lm_2, message = F, warning = F, echo = F}
 m_points = glm(points ~ price, data = wine_data)
@@ -231,7 +252,7 @@ This is a linear model that shows the predicted number of points for a particula
 
 While holding all other variables constant, a wine from one of the five top countries is expected to have a predicted point value that is 0.66 points higher than a wine from any other country and a  wine from one of the five top varieties is expected to have a predicted point value that is 1.145 points higher than a wine from any other variety.
 
-``` {r average_wine_score_clt, message = FALSE, warning = FALSE, echo = FALSE, eval = F}
+``` {r average_wine_score_clt, message = FALSE, warning = FALSE, echo = FALSE}
 t.test(wine_data$points,
        mu = 90.93939,
        alternative = "two.sided")
@@ -444,6 +465,26 @@ bottom_5_descriptor_counts <- bottom_5_descriptors %>%
   top_n(10)
 ```
 
+
+
+``` {r descriptor_plots, message = F, warning = F, echo = F}
+ggplot(data = top_5_descriptor_counts, aes(fct_reorder(word, prob), prob)) +
+    geom_col(color = "darkblue", fill = "skyblue") +
+    coord_flip() + 
+    theme_minimal() +
+    labs(title = "Frequency Of Descriptor Words In Top 5 Wines",
+         x = "Descriptor Words",
+         y = "Frequency")
+
+ggplot(data = bottom_5_descriptor_counts, aes(fct_reorder(word, prob), prob)) +
+    geom_col(color = "darkblue", fill = "skyblue") +
+    coord_flip() + 
+    theme_minimal() +
+    labs(title = "Frequency Of Descriptor Words In Bottom 5 Wines",
+         x = "Descriptor Words",
+         y = "Frequency")
+```
+
 There are a surprising amount of similarities in the most commonly used descriptor words for the top and bottom 5 wine varieties. We see that tannins and lemon both fall near the bottom of the graph for both groups, but that the words acidity and ripe fall in the top 4 for both graphs as well. 
 
 On the other hand, we see some differences in the data. For example, we see that the word cherry is very commonly used in the descriptions of the top 5 wines (nearly 1.5% of all words used was the cherry!). We also see dry and red rounding out the top 5.
@@ -494,14 +535,32 @@ cheap_wine_word_counts <- unnested_under_10 %>%
   top_n(10)
 ```
 
-Here we are separating the wines by expensive (>= $200) and cheap (<= $10). Again, we see some immediate similarities between the two. For example, we see tannins, red, black, ripe, and berry falling at different positions for each throughout the graph. There don't seem to be any similarities as to where they appear in the lists (i.e. appears in the top 3 for both), but it is interesting to note that they are present in both. Acidity makes sense as to why it appears as it is present in all wines, although it is interesting that it is the most common descriptor for cheaper wines by a fair margin. Another thing to note is that both categories have the word red fairly often (presumably referencing red wine) and we know from our top wine varieties that red wine tends to be rated more highly. We expected the cheap wines to reference white more often, however this was not the case.
+``` {r cheap_vs_expensive_descriptor_plots, message = F, warning = F, echo = F}
+ggplot(data = expensive_wine_word_counts, aes(fct_reorder(word, prob), prob)) +
+    geom_col(color = "darkblue", fill = "skyblue") +
+    coord_flip() + 
+    theme_minimal() +
+    labs(title = "Frequency Of Descriptor Words In Expensive Wines",
+         x = "Descriptor Words",
+         y = "Frequency")
 
-On the expensive side, we see the words oak, aging, and berry. Perhaps it is the case that these expensive wines are more likely to be stored and aged in higher quality barrels (oak may be the preferred substance) than cheaper ones. The presence of aging makes sense since there tends to be a correlation between older wines and higher prices. Berry is intriguing though. Recall that berry was one of the descriptors present in the bottom 5 wines from above. We find it very interesting that there is this correlation between expensive wines and lowly rated wines. Additionally, both black and ripe appear in the same places in the expensive chart as they do in the bottom 5 wine chart. While both of these words are also present in the cheaper wine charts, this is expected as we hypothesized that cheaper wines would correlate higher with lower rated wines. This leads us to the conclusion that more expensive wines do not necessarily imply higher scoring wines. There may even be correlations to the contrary. 
+ggplot(data = cheap_wine_word_counts, aes(fct_reorder(word, prob), prob)) +
+    geom_col(color = "darkblue", fill = "skyblue") +
+    coord_flip() + 
+    theme_minimal() +
+    labs(title = "Frequency Of Descriptor Words In Cheap Wines",
+         x = "Descriptor Words",
+         y = "Frequency")
+```
+
+Here we separated the wines by expensive (>= $200) and cheap (<= $10) for our analysis. In general, the words tannins, red, black, ripe, and berry did not show any obvious differences in frequency between the highly and poorly rated wines, and these words are also present in both expensive and cheap wines. Acidity was present in all wines, but was most common descriptor for cheaper wines by a fair margin. We know from our top wine varieties that red wine tends to be rated more highly, so we expected the cheap wines to reference white more often, however this was not the case. Both cheap and expensive wines referenced red often.
+
+On the expensive side, we see the words oak, aging, and berry in high frequency. Perhaps it is the case that these expensive wines are more likely to be stored and aged in higher quality barrels (oak may be the preferred substance) than cheaper ones. The presence of aging makes sense since there tends to be a correlation between older wines and higher prices. It is notable that the descriptors berry, black, and ripe were frequent in expensive wines and in the five most poorly rated wines. This supports the idea that more expensive wines do not necessarily imply higher scoring wines.  
 
 Similarly, we see that cherry is 10th most commonly occurring word for the cheap wines and it is also the most commonly occurring word for the top 5 wines. This is a very interesting correlation and, when paired with our observations from the previous paragraph, make us begin to question whether paying more for wine is really worth it overall. There are certainly outliers on both sides, but it seems that there tends to be a correlation between cheap wine and highly rated wine, as well as one between expensive wine and lowly rated wine.
 
 
-``` {r weighted_wine_scores_to_price, message = FALSE, warning = FALSE, echo = FALSE, eval = F}
+``` {r weighted_wine_scores_to_price, message = FALSE, warning = FALSE, echo = FALSE}
 weighted_avg <- wine_data %>%
     group_by(country)%>%
     summarize(country, winery, variety, price, country, points, weighted = points/price) %>%
@@ -524,7 +583,7 @@ ggplot(data = weighted_avg, mapping = aes(x = price, y = weighted)) +
 
 
 
-```{r austria_vis, message = F, warning = F, echo = F, eval = F}
+```{r austria_vis, message = F, warning = F, echo = F}
 
 austria <- relevant_countries %>% 
     mutate(weighted = log((price/points), base = exp(1))) %>% 
@@ -555,10 +614,16 @@ Top Countries and Varieties
   
 Relationship Between Price and Points  
 
+  In addition to the calculation of the top countries and varieties, the linear models for predicted price both give evidence for a positive strong relationship between price and points. 
+  The linear model with top countries and top variety factors gave p values of 5.56e-21 and 1.63e-56, respectively. At an alpha level of 0.05, this gives strong evidence against a null hypothesis which is that there is no relationship between being in the top variety or country and the point value.
+  This means that when choosing a wine to maximize points awarded by wine connoisseurs, it makes the most sense to choose a wine from one of these top countries and varieties. 
+  Our weighted model graphically depicts the trend that as points goes up, so does price. We used a log transformation on the graph because the data was very right skewed and this transformation best displayed the relationship between the weighted variable and the price in a linear fashion. Although Austria has a relatively low sample size, the line fitted to Austria's wine data has the steepest slope which is consistent with the conclusion that Austria has the best wine for its price. 
+
   The linear models for predicted price both give evidence for a positive strong relationship between price and points. 
   The linear model that predicted the number of points a wine would receive with a price factor had a p value of 3.77e-311 for the price factor. At an alpha level of 0.05, this gives strong evidence against a null hypothesis that there is no relationship between price and points.
   The linear model with top countries and top variety factors gave p values of 5.56e-21 and 1.63e-56, respectively. At an alpha level of 0.05, this gives strong evidence against a null hypothesis that there is no relationship between being in the top variety or country and the point value.
   This means that when choosing a wine to maximize points awarded by wine connoisseurs, it makes the most sense to choose a wine from one of these top countries and varieties. It should be noted that the data for the linear model was not normally distributed. This makes analysis using a linear model less effective.
+
 
 Text Analysis
   
@@ -580,47 +645,8 @@ Text Analysis
 
 ### Appendix
 
-``` {r descriptor_plots_1, message = F, warning = F, echo = F, fig.height = 3, fig.width = 5}
-ggplot(data = top_5_descriptor_counts, aes(fct_reorder(word, prob), prob)) +
-    geom_col(color = "darkblue", fill = "skyblue") +
-    coord_flip() + 
-    theme_minimal() +
-    labs(title = "Frequency Of Descriptor Words In Top 5 Wines",
-         x = "Descriptor Words",
-         y = "Frequency")
-```
-
-```{r descriptor_plots_2, message = F, warning = F, echo = F, fig.height = 3, fig.width = 5}
-ggplot(data = bottom_5_descriptor_counts, aes(fct_reorder(word, prob), prob)) +
-    geom_col(color = "darkblue", fill = "skyblue") +
-    coord_flip() + 
-    theme_minimal() +
-    labs(title = "Frequency Of Descriptor Words In Bottom 5 Wines",
-         x = "Descriptor Words",
-         y = "Frequency")
-```
-
-``` {r cheap_vs_expensive_descriptor_plots_1, message = F, warning = F, echo = F, fig.height = 3, fig.width = 5}
-ggplot(data = expensive_wine_word_counts, aes(fct_reorder(word, prob), prob)) +
-    geom_col(color = "darkblue", fill = "skyblue") +
-    coord_flip() + 
-    theme_minimal() +
-    labs(title = "Frequency Of Descriptor Words In Expensive Wines",
-         x = "Descriptor Words",
-         y = "Frequency")
-```
-
-```{r cheap_vs_expensive_descriptor_plots_2, message = F, warning = F, echo = F, fig.height = 3, fig.width = 5}
-
-ggplot(data = cheap_wine_word_counts, aes(fct_reorder(word, prob), prob)) +
-    geom_col(color = "darkblue", fill = "skyblue") +
-    coord_flip() + 
-    theme_minimal() +
-    labs(title = "Frequency Of Descriptor Words In Cheap Wines",
-         x = "Descriptor Words",
-         y = "Frequency")
-```
-
 In working on our text and sentiment analysis, we quickly realized that we had to do some filtering beyond just a standard stop word anti join. To do this, we would run our code to retrieve the top 20 most common words that appeared in the descriptions for our different categories, and then analyze them to see if they all made sense. After repeating this many times, we felt that we had a representative sample of descriptors that were significant. Some of them were removed based off of the specific filter. For example, if we were filtering for Pinot Noirs, we didn't need to see the word Pinot in our top 20 descriptors. Additionally, we chose words like generous that didn't seem to tell us much and other words like wine and flavors that can reasonably be expected to be present in every description. There was certainly a bit of arbitrary choice involved here, but we felt all of the words taken out were not relevant to the comparisons we were making. Below you will find a list of the words we removed. 
 
 wine, flavors, palate, drink, aromas, offers, finish, notes, long, generous, hints, nose, fresh, fruit, full, character, ready, 100,  merlot, texture, end, medium, bodied, malbec, portuguese, chardonnay, blanc, viognier, note, show, vineyard, style, shows, make, pinot, sauvignon, body, bottling, alongside, dense, dried, concentrated, years, vineyard, structure, age, fruits
+
+**maybe add in here the lm test with points and price that we took out
