@@ -190,7 +190,7 @@ ggplot(data = top_var, mapping = aes(price)) +
 
 ```
 
-Overall, the density plots for the top five varieties and top five countries all look generally similar. The data is left skewed and most of the wines are less than 100 dollars. One noticeable difference is that both Austria and the Gruner Veltliner variety generally have cheaper wines compared to the other top varieties or countries.
+Overall, the density plots for the top five varieties and top five countries all look generally similar. The data is right skewed and most of the wines are less than 100 dollars. One noticeable difference is that both Austria and the Gruner Veltliner variety generally have cheaper wines compared to the other top varieties or countries.
 
 ```{r lm_tests, message = F, warning = F, echo = F}
 
@@ -211,7 +211,7 @@ tidy(m_points)
 
 predicted points = 88.13 + 0.66(topcountry) + 1.145(topvariety)
 
-This is a linear model that shows the predicted number of points for a particular wine given whether or not the wine is from a top country and whether or not the wine is from a top variety. 88.13 is the predicted point value of a wine assuming all other variables are 0. This means that if the wine was not in a top country and not in a top variety, this is the estimated point value. While holding all other variables constant, a wine from one of the five top countries is expected to have a predicted point value that is 0.66 points higher than a wine from any other country and a  wine from one of the five top varieties is expected to have a predicted point value that is 1.145 points higher than a wine from any other variety.
+This is a linear model that shows the predicted number of points for a particular wine given whether or not the wine is from a top country and whether or not the wine is from a top variety (see **Appendix A** for this model). 88.13 is the predicted point value of a wine assuming all other variables are 0. This means that if the wine was not in a top country and not in a top variety, this is the estimated point value. While holding all other variables constant, a wine from one of the five top countries is expected to have a predicted point value that is 0.66 points higher than a wine from any other country and a  wine from one of the five top varieties is expected to have a predicted point value that is 1.145 points higher than a wine from any other variety.
 
 ``` {r average_wine_score_clt, message = FALSE, warning = FALSE, echo = FALSE, eval = F}
 t.test(wine_data$points,
@@ -219,10 +219,10 @@ t.test(wine_data$points,
        alternative = "two.sided")
 ```
 
-$H_0$ =  the true mean of the points is equal to 90.939
-$H_1$ = the true mean of the points is NOT equal to 90.939
-$\alpha$ = 0.05
-p value: 2.2e-16
+$H_0$ =  the true mean of the points is equal to 90.939;
+$H_1$ = the true mean of the points is NOT equal to 90.939;
+$\alpha$ = 0.05;
+p value: 2.2e-16;
 decision: reject the null hypothesis
 
 Here, we see that the overall mean of all wine scores is 88.88125 and has a 95% confidence interval or 88.82544 to 88.93706. This shows us that our observed average score of 90.79 for the top rated wine country (Austria) has statistical significance in its difference from the mean.
@@ -414,7 +414,7 @@ bottom_5_descriptor_counts <- bottom_5_descriptors %>%
   top_n(10)
 ```
 
-There are a surprising amount of similarities in the most commonly used descriptor words for the top and bottom 5 wine varieties. We see that tannins and lemon both fall near the bottom of the graph for both groups, but that the words acidity and ripe fall in the top 4 for both graphs as well. On the other hand, we see some differences in the data. For example, we see that the word cherry is very commonly used in the descriptions of the top 5 wines (nearly 1.5% of all words used was the cherry!). We also see dry and red rounding out the top 5.
+There are a surprising amount of similarities in the most commonly used descriptor words for the top and bottom 5 wine varieties (see **Appendix B** and **Appendix C** for these visualizations). We see that tannins and lemon both fall near the bottom of the graph for both groups, but that the words acidity and ripe fall in the top 4 for both graphs as well. On the other hand, we see some differences in the data. For example, we see that the word cherry is very commonly used in the descriptions of the top 5 wines (nearly 1.5% of all words used was the cherry!). We also see dry and red rounding out the top 5.
 
 ``` {r sentiment_analysis_expensive_and_cheap, warning = F, message = F, echo = FALSE}
 over_200 <- wine_data %>%
@@ -458,7 +458,7 @@ cheap_wine_word_counts <- unnested_under_10 %>%
   arrange(desc(prob)) %>%
   top_n(10)
 ```
-Here we are separating the wines by expensive (>= $200) and cheap (<= $10). Again, we see some immediate similarities between the two. For example, we see tannins, red, black, ripe, and berry falling at different positions for each throughout the graph. There don't seem to be any similarities as to where they appear in the lists (i.e. appears in the top 3 for both), but it is interesting to note that they are present in both. Acidity makes sense as to why it appears as it is present in all wines, although it is interesting that it is the most common descriptor for cheaper wines by a fair margin. Another thing to note is that both categories have the word red fairly often (presumably referencing red wine) and we know from our top wine varieties that red wine tends to be rated more highly. We expected the cheap wines to reference white more often, however this was not the case. On the expensive side, we see the words oak, aging, and berry. Perhaps it is the case that these expensive wines are more likely to be stored and aged in higher quality barrels (oak may be the preferred substance) than cheaper ones. The presence of aging makes sense since there tends to be a correlation between older wines and higher prices. Berry is intriguing though. Recall that berry was one of the descriptors present in the bottom 5 wines from above. We find it very interesting that there is this correlation between expensive wines and lowly rated wines. Additionally, both black and ripe appear in the same places in the expensive chart as they do in the bottom 5 wine chart. While both of these words are also present in the cheaper wine charts, this is expected as we hypothesized that cheaper wines would correlate higher with lower rated wines. This leads us to the conclusion that more expensive wines do not necessarily imply higher scoring wines. There may even be correlations to the contrary. Similarly, we see that cherry is 10th most commonly occurring word for the cheap wines and it is also the most commonly occurring word for the top 5 wines. This is a very interesting correlation and, when paired with our observations from the previous paragraph, make us begin to question whether paying more for wine is really worth it overall. There are certainly outliers on both sides, but it seems that there tends to be a correlation between cheap wine and highly rated wine, as well as one between expensive wine and lowly rated wine.
+Here we are separating the wines by expensive (>= $200) and cheap (<= $10). Again, we see some immediate similarities between the two. For example, we see tannins, red, black, ripe, and berry falling at different positions for each throughout the graph (see **Appendix D** and **Appendix E** for these visualizations). There don't seem to be any similarities as to where they appear in the lists (i.e. appears in the top 3 for both), but it is interesting to note that they are present in both. Acidity makes sense as to why it appears as it is present in all wines, although it is interesting that it is the most common descriptor for cheaper wines by a fair margin. Another thing to note is that both categories have the word red fairly often (presumably referencing red wine) and we know from our top wine varieties that red wine tends to be rated more highly. We expected the cheap wines to reference white more often, however this was not the case. On the expensive side, we see the words oak, aging, and berry. Perhaps it is the case that these expensive wines are more likely to be stored and aged in higher quality barrels (oak may be the preferred substance) than cheaper ones. The presence of aging makes sense since there tends to be a correlation between older wines and higher prices. Berry is intriguing though. Recall that berry was one of the descriptors present in the bottom 5 wines from above. We find it very interesting that there is this correlation between expensive wines and lowly rated wines. Additionally, both black and ripe appear in the same places in the expensive chart as they do in the bottom 5 wine chart. While both of these words are also present in the cheaper wine charts, this is expected as we hypothesized that cheaper wines would correlate higher with lower rated wines. This leads us to the conclusion that more expensive wines do not necessarily imply higher scoring wines. There may even be correlations to the contrary. Similarly, we see that cherry is 10th most commonly occurring word for the cheap wines and it is also the most commonly occurring word for the top 5 wines. This is a very interesting correlation and, when paired with our observations from the previous paragraph, make us begin to question whether paying more for wine is really worth it overall. There are certainly outliers on both sides, but it seems that there tends to be a correlation between cheap wine and highly rated wine, as well as one between expensive wine and lowly rated wine.
 
 ``` {r weighted_wine_scores_to_price, message = FALSE, warning = FALSE, echo = FALSE, eval = F}
 weighted_avg <- wine_data %>%
@@ -517,9 +517,14 @@ In order to test these hypotheses in a future analysis we could count these word
 [3] Huen, Eustacia. “The World's 30 Best Wines In 2019.” Forbes, Forbes Magazine, 26 Mar. 2019, www.forbes.com/sites/eustaciahuen/2019/03/25/wine-3/. 
 
 ### Appendix
+
+### Appendix A
+
 ``` {r lm_model, message = F, warning = F, echo = F}
 tidy(modell)
 ```
+
+### Appendix B
 
 ``` {r descriptor_plots_1, message = F, warning = F, echo = F, fig.height = 3, fig.width = 5}
 ggplot(data = top_5_descriptor_counts, aes(fct_reorder(word, prob), prob)) +
@@ -531,6 +536,8 @@ ggplot(data = top_5_descriptor_counts, aes(fct_reorder(word, prob), prob)) +
          y = "Frequency")
 ```
 
+### Appendix C
+
 ```{r descriptor_plots_2, message = F, warning = F, echo = F, fig.height = 3, fig.width = 5}
 ggplot(data = bottom_5_descriptor_counts, aes(fct_reorder(word, prob), prob)) +
     geom_col(color = "darkblue", fill = "skyblue") +
@@ -541,6 +548,8 @@ ggplot(data = bottom_5_descriptor_counts, aes(fct_reorder(word, prob), prob)) +
          y = "Frequency")
 ```
 
+### Appendix D
+
 ``` {r cheap_vs_expensive_descriptor_plots_1, message = F, warning = F, echo = F, fig.height = 3, fig.width = 5}
 ggplot(data = expensive_wine_word_counts, aes(fct_reorder(word, prob), prob)) +
     geom_col(color = "darkblue", fill = "skyblue") +
@@ -550,6 +559,8 @@ ggplot(data = expensive_wine_word_counts, aes(fct_reorder(word, prob), prob)) +
          x = "Descriptor Words",
          y = "Frequency")
 ```
+
+### Appendix E
 
 ```{r cheap_vs_expensive_descriptor_plots_2, message = F, warning = F, echo = F, fig.height = 3, fig.width = 5}
 ggplot(data = cheap_wine_word_counts, aes(fct_reorder(word, prob), prob)) +
