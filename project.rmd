@@ -1,7 +1,7 @@
 ---
 title: "What Makes a Good Wine?"
-subtitle: "Due Friday, November 20, 11:59 PM"
-author: "Tennis Trio: Hamilton Murrah, Kellyn McDonald, Naima Turbes"
+subtitle: "A Statistical Analysis of the Best Way to Select Wine"
+author: "Hamilton Murrah, Kellyn McDonald, Naima Turbes"
 output: pdf_document
 ---
 ```{r packages-data, warning=FALSE, message=FALSE, echo = FALSE}
@@ -12,6 +12,12 @@ knitr::opts_chunk$set(warning = FALSE, message = FALSE, echo = FALSE)
 aspect_ratio <- 2.5
 height <- 7
 ```
+### Abstract
+
+
+\newpage
+
+
 ### Introduction
 
 People have cultivated and appreciated wines for millennia. In fact, the oldest known winery was found in a cave outside of a village in Armenia and dates back to 4,100 BC. Since then, wine production and consumption has spread throughout the globe and become a important part of many cultures. Today, wine is largely used as a celebratory drink during activities like weddings or holidays. Fine wines are often more expensive and associated with higher societal status or class[1].
