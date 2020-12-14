@@ -12,7 +12,7 @@ knitr::opts_chunk$set(warning = FALSE, message = FALSE, echo = FALSE)
 ```
 ### Abstract
 
-Several studies have tried to identify the "best wine" with differing results. This research study aims to characterize the relationship between a wine's country of origin, price, quality rating, variety, descriptive words. We want to use this information to guide advice on selecting the best wines. We used a dataset containing wine ratings from wine experts and conducted a number of statistical analyses on the data. We found that wines from Austria and Germany had the highest average ranking and a positive relationship between price and points awarded to a wine. Text analysis showed that expensive wines and poorly rated wines had similar descriptors. We concluded that generally more expensive wines are perceived as better, but other variables also influence a wine's ranking. For example, extremely expensive or cheap wines might deviate from this trend. In these cases, generally red and cherry wines have higher scores regardless of price.
+Several studies have tried to identify the "best wine" with differing results. This research study aims to characterize the relationship between a wine’s quality rating and its country of origin, price, variety, and words used in its description. We want to use this information to guide advice on selecting the best wines. We used a dataset of wine as rated by experts, and found higher ratings were associated with higher price and with being from Germany or Austria. We additionally found that red wines and those using “cherry” as a descriptor generally had higher scores regardless of price, but text analysis also suggested that in general, all wines used similar descriptors. We concluded that generally more expensive wines are perceived as better, but other variables also influence a wine's ranking. For example, extremely expensive or cheap wines might deviate from this trend. In these cases, generally red and cherry wines have higher scores regardless of price.
 
 \newpage
 
@@ -20,7 +20,9 @@ Several studies have tried to identify the "best wine" with differing results. T
 
 ### Introduction
 
-People have cultivated and appreciated wines for millennia. In fact, the oldest known winery was found in a cave outside of a village in Armenia and dates back to 4,100 BC. Since then, wine production and consumption has spread throughout the globe and become a important part of many cultures. Today, wine is largely used as a celebratory drink during activities like weddings or holidays. Fine wines are often more expensive and associated with higher societal status or class[1].
+
+
+People have cultivated and appreciated wine for millennia, with the oldest known winery dating to 4,100 B.C. Since then, wine production and consumption spread has become an important part of many cultures. Today, wine is often used as a celebratory drink during weddings or holidays, with fine wine being expensive and associated with higher social class[1].
 
 Most current wine production happens in Europe. In 2019, Italy produced 21.6 million hectoliters of wine and was the world's largest wine producer. The next two largest wine producers that year were Spain and France, producing 21.3 million hectoliters and 14.2 million hectoliters respectively [2]. Nevertheless, a 2019 survey from Forbes found that the the best ranked wine was from Napa Valley in the United States [3]. We are curious to see if this has changed.
 
@@ -28,21 +30,15 @@ Our main motivation for investigating wine data is pure interest and desire to u
 
 ### Methodology
 
-We obtained this data set from Kaggle, where user zackthoutt on Kaggle had collected it by scraping data from WineEnthusiast.com. The variables that we utilized in our analysis were: `country`: The country that the wine is from, `description`: A few sentences from a sommelier describing the wine's taste, smell, look, feel, etc., `points`: The number of points WineEnthusiast rated the wine on a scale of 1-100 (though they say they only post reviews for wines that score $\geq$ 80), `price`: The cost for a bottle of the wine, `variety`: The type of grapes used to make the wine (ie Pinot Noir)
 
-We conducted the following tests below to evaluate our hypotheses.
+We obtained a dataset from user zackthoutt on Kaggle, who scraped 150,929 observations from WineEnthusiast.com. Our primary outcome of interest was a numerical score from 1-100 given by WineEnthusiast, and we examined relationships with each wine’s country of origin, price, grape variety, and a text description from a sommelier.
 
-1. We created a linear model to predict points depending on if the wine was in a top country or not and depending on if the wine was in a top variety or not. We found sufficient evidence to suggest that wines in top countries and varieties have larger point values, while controlling for other variables such as price.  
 
-We also found that the data had independence, linearity, and equal variance to support the use of a linear model analysis. It should be noted that the data did not display normality.
+We performed the following analyses in order to explore potential relationships:
 
-3. We used a CLT based t test to determine whether there is a statistically significant difference between the highest rated country's average score and the average wine score for all countries.
+1.	A linear model that predicted score based on country, grape variety, and price.
+2.	Exploratory text analysis and visualization regarding key descriptors
 
-We know that it is appropriate to use a CLT based test because the samples are independent of each other (taken randomly) due to the way that the data was collected. Moreover, n>30 in this sampling.
-
-4. We used text analysis on the description variable to pick out key word descriptors in order to determine if there is there a relationship between the descriptor and the score. We visualized this relationship.
-
-5. We calculated a weighted score for wines considering the number of points received and expense of the wine and then took the log of this value since our data is heavily right skewed. We created a transformed linear model to observe this relationship on a graph.
 
 ### Results
  
