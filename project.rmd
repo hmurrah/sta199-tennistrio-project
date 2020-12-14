@@ -197,34 +197,30 @@ lmthingy <- wine_data %>%
   mutate (top_countries = ifelse(country == "Austria" | country == "France"| country == "US" | country == "Italy" | country == "Germany", 1, 0)) %>%
   mutate (top_varieties = ifelse(variety == "Gewürztraminer" | variety == "Grüner Veltliner"| variety == "Pinot Gris" | variety == "Pinot Noir" | variety == "Riesling", 1, 0))
 
- 
-modell <- lm(points ~ top_countries + top_varieties, data = lmthingy)
+top_5_countries_and_other <- wine_data %>%
+  mutate(top_countries = if_else(
+    country == "Austria" |
+    country == "France" |
+    country == "US" |
+    country == "Italy" |
+    country == "Germany", country, "other"
+)) %>%
+  mutate(top_varieties = if_else(
+    variety == "Gewürztraminer" |
+    variety == "Grüner Veltliner" |
+    variety == "Pinot Gris" |
+    variety == "Pinot Noir" |
+    variety == "Riesling", variety, "other"))
+
+modell <- lm(points ~ price + top_countries + top_varieties, data = top_5_countries_and_other)
 
 m_int_aug <- augment(modell)
 ```
 
-``` {r points_price_lm_2, message = F, warning = F, echo = F, eval = F}
-m_points = glm(points ~ price, data = wine_data)
-tidy(m_points)
-```
+predicted points = 91.80 + 0.03(price) - 2.16(France) - 2.97(Germany) - 2.44(Italy) - 2.43(US) - 2.71(other_country) - 1.67(Grüner_Veltliner) - 0.50(Pinot_Gris) - 0.95(Pinot_Noir) - 0.43(Riesling) - -1.84(other_variety)
 
-predicted points = 88.13 + 0.66(topcountry) + 1.145(topvariety)
+This is a linear model that shows the predicted number of points for a particular wine when considering which country it is from (one of the top 5 or not), which variety it is (one of the top 5 or not), and its price (see **Appendix A** for this model). In this case our baseline variable is when the wine is from Austria and is a Gewürztraminer variety. So the predicted point value of a Gewürztraminer wine from Austria assuming all other variables are 0 is 91.8. We see that all of our values are negative for our variables excluding price. This is interesting, yet not surprising when we consider that Austria and Gewürztraminer are being used as our baseline and that they are also the country and the variety with the highest mean wine scores. So inherently every other country and variety must be lower than the baseline Curiously, the estimate decreases do not follow the order of their mean scores. For example, we know that Germany has the second highest mean score, but has the highest decrease in its estimate even when compared to countries outside of the top 5. This could be caused by the fact that Germany has a high mean score, but also a high variability in its scores compared to a country like Austria with a high density of scores around its mean. Also, Riesling is the 5th highest variety in terms of mean scores, and yet has the lowest estimated decrease when compared to all other varieties. This could be because many high scoring wines from Austria are of the Riesling variety.
 
-This is a linear model that shows the predicted number of points for a particular wine given whether or not the wine is from a top country and whether or not the wine is from a top variety (see **Appendix A** for this model). 88.13 is the predicted point value of a wine assuming all other variables are 0. This means that if the wine was not in a top country and not in a top variety, this is the estimated point value. While holding all other variables constant, a wine from one of the five top countries is expected to have a predicted point value that is 0.66 points higher than a wine from any other country and a  wine from one of the five top varieties is expected to have a predicted point value that is 1.145 points higher than a wine from any other variety.
-
-``` {r average_wine_score_clt, message = FALSE, warning = FALSE, echo = FALSE, eval = F}
-t.test(wine_data$points,
-       mu = 90.93939,
-       alternative = "two.sided")
-```
-
-$H_0$ =  the true mean of the points is equal to 90.939;
-$H_1$ = the true mean of the points is NOT equal to 90.939;
-$\alpha$ = 0.05;
-p value: 2.2e-16;
-decision: reject the null hypothesis
-
-Here, we see that the overall mean of all wine scores is 88.88125 and has a 95% confidence interval or 88.82544 to 88.93706. This shows us that our observed average score of 90.79 for the top rated wine country (Austria) has statistical significance in its difference from the mean.
 
 ``` {r sentiment_analysis_top_5_varieties, message = F, warning = F, echo = FALSE}
 Gewürztraminer <- wine_data %>%
