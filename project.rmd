@@ -476,7 +476,7 @@ wine, flavors, palate, drink, aromas, offers, finish, notes, long, generous, hin
 
 ### Appendix F 
 
-```{r points_countries_density, message = F, warning = F, echo = F}
+```{r points_countries_density, message = F, warning = F, echo = F, fig.height = 3, fig.width = 5}
 country_counts <- wine_data %>%
     group_by(country) %>%
     count(country) %>%
@@ -497,7 +497,7 @@ ggplot(data = top_countries, mapping = aes(points)) +
 
 ### Appendix G
 
-```{r points_variety_density, message = F, warning = F, echo = F}
+```{r points_variety_density, message = F, warning = F, echo = F, fig.height = 3, fig.width = 5}
 
 top_var <- wine_data %>% 
   filter(variety == "Gewürztraminer" |
@@ -515,7 +515,7 @@ ggplot(data = top_var, mapping = aes(points)) +
 
 ### Appendix H
 
-```{r price_countries_density, message = F, warning = F, echo = F}
+```{r price_countries_density, message = F, warning = F, echo = F, fig.height = 3, fig.width = 5}
 
 top_countries <- wine_data %>% 
   filter(country == "Austria" |
@@ -533,7 +533,7 @@ ggplot(data = top_countries, mapping = aes(price)) +
 
 ### Appendix I
 
-```{r price_variety_density, message = F, warning = F, echo = F}
+```{r price_variety_density, message = F, warning = F, echo = F, fig.height = 3, fig.width = 5}
 
 top_var <- wine_data %>% 
   filter(variety == "Gewürztraminer" |
